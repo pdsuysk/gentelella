@@ -60,3 +60,25 @@ body {
   margin: 0 5px 0px 15px;
   cursor: pointer;
 }
+/*echart模块*/
+.chart-panel {
+	margin-bottom: 10px;
+	padding: 0 15px;
+	position: relative;
+	background: #FFFFFF;
+}
+.chart-panel:before {
+	content: '';
+	display: inline-block;
+	width: 4px;
+	height: 44px;
+	background: #1ABB9C;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.chart-panel .chart-title {
+  line-height: 44px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
