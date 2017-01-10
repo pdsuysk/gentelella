@@ -82,3 +82,12 @@ body {
   font-size: 16px;
   margin-bottom: 10px;
 }
+.xsmall-chart {
+	height: 60px;
+}
+.middle-chart {
+	height: 300px;
+}
+.large-chart {
+	height: 400px;
+}
