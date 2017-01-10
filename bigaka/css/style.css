@@ -2,6 +2,12 @@
 body {
   font-family: "Microsoft Yahei",Tahoma,"Lucida Grande",Verdana,STXihei,hei;
 }
+a {
+	cursor: pointer;
+}
+body .container.body .right_col {
+	margin-bottom: 49px;
+}
 .main_menu .fa {
 	float: left;
 	margin-top: 1px;
@@ -38,12 +44,15 @@ body {
 .popover-content {
   font-family: "Microsoft Yahei",Tahoma,"Lucida Grande",Verdana,STXihei,hei;
 }
-.toggle .tips {
+.tips {
 	display: inline-block;
-  float: right;
   margin: 0 0 0 10px;
-  line-height: 28px;
   color: #9e9e9e;
+  font-size: 12px;
+}
+.toggle .tips {
+  float: right;
+  line-height: 28px;
 }
 
 /*头部数据刷新时间*/
@@ -71,14 +80,14 @@ body {
 	content: '';
 	display: inline-block;
 	width: 4px;
-	height: 44px;
+	height: 36px;
 	background: #1ABB9C;
 	position: absolute;
 	left: 0;
 	top: 0;
 }
 .chart-panel .chart-title {
-  line-height: 44px;
+  line-height: 36px;
   font-size: 16px;
   margin-bottom: 10px;
 }
@@ -90,4 +99,14 @@ body {
 }
 .large-chart {
 	height: 400px;
+}
+.custom-user-percent {
+	display: none;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	padding: 0 10px;
+	background: #E74C3C;
+	color: #FFFFFF;
+	border-radius: 5px;
 }

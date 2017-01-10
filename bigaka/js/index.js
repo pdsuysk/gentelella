@@ -12,14 +12,6 @@ $(function() {
 		resetCharts();
 	});
 	
-	var loadingOption = {
-	  text: '',
-	  color: '#1ABB9C',
-	  textColor: '#000',
-	  maskColor: 'rgba(255, 255, 255, 0.8)',
-	  zlevel: 0
-	}
-	
 	var baseSimpleOption = { // 只显示图其他控件都不现实的基础配置
 		color : [ '#1ABB9C' ],
 		title : { // 标题
@@ -165,7 +157,7 @@ $(function() {
 					formatter: '{b}',
 					position: [10, 14],
 					textStyle: {
-						color: '#014b5a'
+						color: '#626c91'
 					}
 				}
 			}
@@ -191,7 +183,7 @@ $(function() {
 	couponStatisticsChart.showLoading('default', loadingOption);
 	pageEcharts.push(couponStatisticsChart);
 	couponStatisticsChart.setOption({
-		color : [ '#1ABB9C', '#0d748a'],
+		color : [ '#1ABB9C', '#7bd9a5'],
 		title : { // 标题
 			show : true,
 			text: '日营销总数量',
@@ -205,13 +197,6 @@ $(function() {
 		},
 		tooltip : { // 鼠标悬浮提示框
 			position: 'top'
-		},
-		legend : { // 图例
-			data:[{
-				name: '领取量'
-			},{
-				name: '核销量'
-			}]
 		},
 		grid : { // 网格
 			left : 30,
@@ -244,34 +229,13 @@ $(function() {
 				}
 			}
 		},
-		series : [{
-	        name: '领取量',
-	        type: 'line',
-	        smooth: true,
-	        smoothMonotone: 'x',
-	        areaStyle: {
-	        	normal: {
-	        		opacity: 0.3
-	        	}
-	        }
-	    },
-	    {
-	        name: '核销量',
-	        type: 'line',
-	        smooth: true,
-	        smoothMonotone: 'x',
-	        areaStyle: {
-	        	normal: {
-	        		opacity: 0.3
-	        	}
-	        }
-	    }]
+		series : []
 	}); // 生效配置
 	var couponRankChart = echarts.init(document.getElementById('couponRank')); // 基于准备好的dom，初始化echarts实例
 	couponRankChart.showLoading('default', loadingOption);
 	pageEcharts.push(couponRankChart);
 	couponRankChart.setOption($.extend(true, {}, baseMiddelOption, {
-		color : [ '#1ABB9C', '#0d748a'],
+		color : [ '#1ABB9C', '#7bd9a5'],
 		title : { // 标题
 			show : true,
 			text: '营销数量TOP5',
@@ -312,15 +276,17 @@ $(function() {
 	        	emphasis: {
 					show: true,
 					position: [10, 3],
+					formatter: '{b}',
 					textStyle: {
-						color: '#014b5a'
+						color: '#626c91'
 					}
 				},
 				normal: {
 					show: true,
 					position: [10, 3],
+					formatter: '{b}',
 					textStyle: {
-						color: '#014b5a'
+						color: '#626c91'
 					}
 				}
 			},
@@ -332,15 +298,17 @@ $(function() {
 	        	emphasis: {
 					show: true,
 					position: [10, 3],
+					formatter: '{b}',
 					textStyle: {
-						color: '#00c19c'
+						color: '#516b91'
 					}
 				},
 				normal: {
 					show: true,
 					position: [10, 3],
+					formatter: '{b}',
 					textStyle: {
-						color: '#00c19c'
+						color: '#516b91'
 					}
 				}
 			},
@@ -353,21 +321,90 @@ $(function() {
 		var daysNewMoneyDatas = [10,20,5,20,5,36,10];
 		var daysNewCouponDatas = [10,20,5,20,5,36,10];
 		
-		var top5ShopUserShops = ['人民广场店','徐家汇店','南京东路店','中山公园店','马路牙子店'];
-		var top5ShopUserDatas = [10000,8452,7158,5848,1000];
-		var top5ShopOrderShops = ['徐家汇店','南京东路店','人民广场店','中山公园店','马路牙子店'];
-		var top5ShopOrderDatas = [500,451,345,344,122];
-		var top5ShopMoneyShops = ['中山公园店','马路牙子店','人民广场店','徐家汇店','南京东路店'];	
-		var top5ShopMoneyDatas = [21458,16845,7158,5848,1000];
+		var top5ShopUserDatas = [{
+			value: 10000,
+			name: '人民广场店'
+		},{
+			value: 8452,
+			name: '徐家汇店'
+		},{
+			value: 7158,
+			name: '马路牙子店'
+		},{
+			value: 5848,
+			name: '南京东路店'
+		},{
+			value: 1000,
+			name: '中山公园店'
+		}];
+		var top5ShopOrderDatas = [{
+			value: 10000,
+			name: '人民广场店'
+		},{
+			value: 8452,
+			name: '徐家汇店'
+		},{
+			value: 7158,
+			name: '马路牙子店'
+		},{
+			value: 5848,
+			name: '南京东路店'
+		},{
+			value: 1000,
+			name: '中山公园店'
+		}];;
+		var top5ShopMoneyDatas = [{
+			value: 10000,
+			name: '人民广场店'
+		},{
+			value: 8452,
+			name: '徐家汇店'
+		},{
+			value: 7158,
+			name: '马路牙子店'
+		},{
+			value: 5848,
+			name: '南京东路店'
+		},{
+			value: 1000,
+			name: '中山公园店'
+		}];;
 		
 		var couponStatisticsGetDatas = [10,20,5,20,5,36,10];
 		var couponStatisticsUseDatas = [20,10,36,5,10,20,36];
 		
-		var couponRankGetShops = ['人民广场店','徐家汇店','马路牙子店','南京东路店','中山公园店'];
-		var couponRankUseShops = ['徐家汇店','南京东路店','人民广场店','中山公园店','马路牙子店'];
-		
-		var couponRankGetDatas = [500,451,345,344,122];
-		var couponRankUseDatas = [700,548,385,245,88];
+		var couponRankGetDatas = [{
+			value: 500,
+			name: '人民广场店'
+		},{
+			value: 451,
+			name: '徐家汇店'
+		},{
+			value: 345,
+			name: '马路牙子店'
+		},{
+			value: 344,
+			name: '南京东路店'
+		},{
+			value: 122,
+			name: '中山公园店'
+		}];
+		var couponRankUseDatas = [{
+			value: 700,
+			name: '人民广场店'
+		},{
+			value: 548,
+			name: '徐家汇店'
+		},{
+			value: 385,
+			name: '马路牙子店'
+		},{
+			value: 245,
+			name: '南京东路店'
+		},{
+			value: 88,
+			name: '中山公园店'
+		}];
 		daysNewUserChart.hideLoading();
 		daysNewUserChart.setOption({
 			series : [{
@@ -395,27 +432,18 @@ $(function() {
 		
 		top5ShopUserChart.hideLoading();
 		top5ShopUserChart.setOption({
-			yAxis : {
-				data : top5ShopUserShops
-			},
 			series : [{
 				data : top5ShopUserDatas
 			}]
 		});
 		top5ShopOrderChart.hideLoading();
 		top5ShopOrderChart.setOption({
-			yAxis : {
-				data : top5ShopOrderShops
-			},
 			series : [{
 				data : top5ShopOrderDatas
 			}]
 		});
 		top5ShopMoneyChart.hideLoading();
 		top5ShopMoneyChart.setOption({
-			yAxis : {
-				data : top5ShopMoneyShops
-			},
 			series : [{
 				data : top5ShopMoneyDatas
 			}]
@@ -423,43 +451,44 @@ $(function() {
 		
 		couponStatisticsChart.hideLoading();
 		couponStatisticsChart.setOption({
+			legend : { // 图例
+				data:[{
+					name: '领取量'
+				},{
+					name: '核销量'
+				}]
+			},
 			series : [{
+		        name: '领取量',
+		        type: 'line',
+		        smooth: true,
+		        smoothMonotone: 'x',
+		        areaStyle: {
+		        	normal: {
+		        		opacity: 0.3
+		        	}
+		        },
 		        data: couponStatisticsGetDatas
 		    },
 		    {
+		        name: '核销量',
+		        type: 'line',
+		        smooth: true,
+		        smoothMonotone: 'x',
+		        areaStyle: {
+		        	normal: {
+		        		opacity: 0.3
+		        	}
+		        },
 		        data: couponStatisticsUseDatas
 		    }]
 		});
 		couponRankChart.hideLoading();
 		couponRankChart.setOption({
 			series : [{
-				label: {
-					emphasis: {
-						formatter: function (response){
-							return couponRankGetShops[response.dataIndex]
-						}
-					},
-					normal: {
-						formatter: function (response){
-							return couponRankGetShops[response.dataIndex]
-						}
-					}
-				},
 				data : couponRankGetDatas
 		    },
 		    {
-		    	label: {
-		    		emphasis: {
-						formatter: function (response){
-							return couponRankUseShops[response.dataIndex]
-						}
-					},
-					normal: {
-						formatter: function (response){
-							return couponRankUseShops[response.dataIndex]
-						}
-					}
-				},
 				data : couponRankUseDatas
 		    }]
 		})

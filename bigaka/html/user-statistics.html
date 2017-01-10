@@ -17,10 +17,10 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
   </head>
 
-  <body class="nav-md">
+  <body class="nav-md footer_fixed">
     <div class="container body">
       <div class="main_container">
-        <div class="col-md-3 left_col">
+        <div class="col-md-3 menu_fixed left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
               <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>零售大数据引擎</span></a>
@@ -116,7 +116,78 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-        	
+        	<div class="row tile_count">
+            <div class="col-sm-3 col-xs-6 tile_stats_count">
+              <span class="count_top">累计会员数</span>
+              <a class="count-top-info" id="totalUserTips">
+              	<i class="fa fa-question-circle"></i>
+              </a>
+              <div class="count green">25000</div>
+              <span class="count_bottom">累计客单价</span>
+              <a class="count-top-info" id="everyPersonPriceTips">
+              	<i class="fa fa-question-circle"></i>
+              </a>
+              <span class="count_bottom pull-right">103.14元/人</span>
+            </div>
+            <div class="col-sm-3 col-xs-6 tile_stats_count">
+              <span class="count_top">绑定手机会员</span>
+              <div class="count green">20000</div>
+              <span class="count_bottom">占累计会员比</span>
+              <span class="count_bottom pull-right">30.11%</span>
+            </div>
+            <div class="col-sm-3 col-xs-6 tile_stats_count">
+              <span class="count_top">7天新增会员</span>
+              <a class="count-top-info" id="days7NewUsersTips">
+              	<i class="fa fa-question-circle"></i>
+              </a>
+              <div class="count green">2500</div>
+              <span class="count_bottom">占累计会员比</span>
+              <span class="count_bottom pull-right">30.11%</span>
+            </div>
+            <div class="col-sm-3 col-xs-6 tile_stats_count">
+              <span class="count_top">7天新增手机会员</span>
+              <div class="count green">1888</div>
+              <span class="count_bottom">占7天新增会员比</span>
+              <span class="count_bottom pull-right">30.11%</span>
+            </div>
+          </div>
+          
+          <div class="row">
+        		<div class="col-xs-12">
+	        		<div class="chart-panel">
+	        			<div class="chart-title">门店会员统计<p class="tips">*门店累计会员排名，图表可缩放和拖拽，点击一条数据可查看对应门店会员转化及增长趋势</p></div>
+	        			<div class="chart-content">
+	        				<div class="row">
+	        					<div class="col-xs-12">
+		        					<div id="shopUsersStatistics" class="large-chart"></div>
+		        				</div>
+	        				</div>
+	        			</div>
+	        		</div>
+	        		
+	        		<div class="chart-panel">
+	        			<div class="chart-title">全部门店-会员数据分析</div>
+	        			<div class="chart-content">
+	        				<div class="row">
+	        					<div class="col-lg-5 col-sm-6 col-xs-12">
+	        						<p>会员漏斗&nbsp;<a id="userFunnelTips"><i class="fa fa-question-circle"></i></a></p>
+		        					<div id="userFunnel" class="middle-chart"></div>
+		        					<div class="custom-user-percent">
+		        						<h4>25.06%</h4>
+		        						<p>消费占手机会员比</p>
+		        					</div>
+		        				</div>
+		        				<div class="col-lg-7 col-sm-6 col-xs-12">
+		        					<div class="clearfix">
+		        						<p>门店新增会员</p>
+		        					</div>
+		        					<div id="timesNewUser" class="middle-chart"></div>
+		        				</div>
+	        				</div>
+	        			</div>
+	        		</div>
+	        	</div>
+        	</div>
         </div>
         <!-- /page content -->
 
@@ -137,6 +208,10 @@
     <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+    <!-- Echarts -->
+    <script src="../js/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
   	<script src="../js/user-statistics.js" type="text/javascript" charset="utf-8"></script>
 
   </body>
