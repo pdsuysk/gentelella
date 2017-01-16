@@ -11,6 +11,8 @@
     <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
     
@@ -170,7 +172,8 @@
 	        			<div class="chart-content">
 	        				<div class="row">
 	        					<div class="col-lg-5 col-sm-6 col-xs-12">
-	        						<p>会员漏斗&nbsp;<a id="userFunnelTips"><i class="fa fa-question-circle"></i></a></p>
+	        						<div class="chart-header clearfix">
+	        							<span class="chart-header-text">会员漏斗</span>&nbsp;<a class="tips-icon" id="userFunnelTips"><i class="fa fa-question-circle"></i></a></div>
 		        					<div id="userFunnel" class="middle-chart"></div>
 		        					<div class="custom-user-percent">
 		        						<h4>25.06%</h4>
@@ -178,9 +181,22 @@
 		        					</div>
 		        				</div>
 		        				<div class="col-lg-7 col-sm-6 col-xs-12">
-		        					<div class="clearfix">
-		        						<p>门店新增会员</p>
-		        					</div>
+		        						<div class="chart-header clearfix">
+		        							<span class="chart-header-text">门店新增会员</span>
+		        							<div class="date-range-selecter pull-right">
+		        								<span>自定义：</span>
+		        								<div id="userChartRange" class="pull-right">
+		                    			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+		                    			<span>点击选择日期</span>
+		                    			<b class="caret"></b>
+		                  			</div>
+		        							</div>
+	                  			<div class="chart-tabs pull-right">
+		        								<span class="active" data-value="7">7天</span>
+		        								<span data-value="30">30天</span>
+		        								<span data-value="90">90天</span>
+		        							</div>
+		        						</div>
 		        					<div id="timesNewUser" class="middle-chart"></div>
 		        				</div>
 	        				</div>
@@ -210,6 +226,9 @@
     <script src="../../build/js/custom.min.js"></script>
     <!-- Echarts -->
     <script src="../js/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../../vendors/moment/min/moment.min.js"></script>
+    <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     
     <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
   	<script src="../js/user-statistics.js" type="text/javascript" charset="utf-8"></script>

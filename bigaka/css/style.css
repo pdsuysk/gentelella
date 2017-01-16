@@ -6,7 +6,7 @@ a {
 	cursor: pointer;
 }
 body .container.body .right_col {
-	margin-bottom: 49px;
+	margin-bottom: 49px !important;
 }
 .main_menu .fa {
 	float: left;
@@ -100,6 +100,7 @@ body .container.body .right_col {
 .large-chart {
 	height: 400px;
 }
+/*会员漏斗消费会员百分比*/
 .custom-user-percent {
 	display: none;
 	position: absolute;
@@ -109,4 +110,74 @@ body .container.body .right_col {
 	background: #E74C3C;
 	color: #FFFFFF;
 	border-radius: 5px;
+}
+
+.chart-header {
+  margin-bottom: 10px;
+}
+.chart-header .tips-icon {
+	display: inline-block;
+  margin-top: 6px;
+}
+.chart-header .chart-header-text {
+	line-height: 31px;
+	display: inline-block;
+	float: left;
+}
+
+.daterangepicker {
+	width: 290px;
+}
+@media (min-width: 564px){
+	.daterangepicker {
+	  width: auto;
+	}
+}
+.daterangepicker .calendar {
+	max-width: 284px;
+}
+.daterangepicker .ranges .range_inputs button {
+	padding: 4px 12px;
+}
+.date-range-selecter {
+	display: inline-block;
+}
+.date-range-selecter>span {
+	display: inline-block;
+	float: left;
+	line-height: 31px;
+}
+.date-range-selecter>div {
+	background: #fff;
+	cursor: pointer;
+	padding: 5px 10px;
+	border: 1px solid #ccc;
+  width: 200px;
+}
+.date-range-selecter>div i.fa-calendar {
+  float: left;
+  margin: 2px 5px 0 0;
+}
+.date-range-selecter>div .caret {
+  float: right;
+  margin: 8px 0 0 5px;
+}
+.chart-tabs {
+	display: inline-block;
+	line-height: 31px;
+}
+.chart-tabs>span {
+  display: inline-block;
+  padding: 0px 15px;
+  border-right: 1px solid #ddd;
+  line-height: 17px;
+  float: left;
+  margin: 7px 0;
+  cursor: pointer;
+}
+.chart-tabs>span.active {
+	color: #1ABB9C;
+}
+.chart-tabs>span:last-child {
+	border-right: 0;
 }
