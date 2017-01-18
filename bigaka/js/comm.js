@@ -1,3 +1,5 @@
+var ajaxDomain = 'http://localhost:8000/proxy/192.168.1.126:8080/wx-big-data/'
+
 var loadingOption = {
 	text: '',
 	color: '#1ABB9C',

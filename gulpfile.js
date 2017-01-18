@@ -40,11 +40,13 @@ gulp.task('sass-minify', function() {
     return compileSASS('custom.min.css', {style: 'compressed'});
 });
 
+// 配置本地服务器
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
             baseDir: './'
         },
+        port: 9006,
         startPath: './bigaka/html/index.html'
     });
 });
