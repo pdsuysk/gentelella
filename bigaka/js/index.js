@@ -11,7 +11,7 @@ $(function() {
 	$(window).resize(function(){
 		resetCharts();
 	});
-	
+
 	var baseSimpleOption = { // 只显示图其他控件都不现实的基础配置
 		color : [ '#1ABB9C' ],
 		title : { // 标题
@@ -97,8 +97,8 @@ $(function() {
 			showAllSymbol: true
 		}]
 	})); // 生效配置
-	
-	
+
+
 	var baseMiddelOption = { // top5表格基础配置
 		color : [ '#1ABB9C' ],
 		title : { // 标题
@@ -129,7 +129,7 @@ $(function() {
 				}
 			},
 			axisLabel: {
-				
+
 			}
 		},
 		yAxis : {
@@ -314,13 +314,21 @@ $(function() {
 			},
 	    }]
 	})); // 生效配置
-	
+
+	$.ajax({
+		url: ctx + 'OrderStoreDateAction/getOSDListByParentId.do?parentStoreId=1624',
+		type: 'post',
+		success: function () {
+
+		}
+	})
+
 	setTimeout(function(){ // 填充数据
 		var daysNewUserDatas = [10,20,5,20,5,36,10];
 		var daysNewOrderDatas = [10,20,5,20,5,36,10];
 		var daysNewMoneyDatas = [10,20,5,20,5,36,10];
 		var daysNewCouponDatas = [10,20,5,20,5,36,10];
-		
+
 		var top5ShopUserDatas = [{
 			value: 10000,
 			name: '人民广场店'
@@ -369,10 +377,10 @@ $(function() {
 			value: 1000,
 			name: '中山公园店'
 		}];;
-		
+
 		var couponStatisticsGetDatas = [10,20,5,20,5,36,10];
 		var couponStatisticsUseDatas = [20,10,36,5,10,20,36];
-		
+
 		var couponRankGetDatas = [{
 			value: 500,
 			name: '人民广场店'
@@ -429,7 +437,7 @@ $(function() {
 				data : daysNewCouponDatas
 			}]
 		});
-		
+
 		top5ShopUserChart.hideLoading();
 		top5ShopUserChart.setOption({
 			series : [{
@@ -448,7 +456,7 @@ $(function() {
 				data : top5ShopMoneyDatas
 			}]
 		});
-		
+
 		couponStatisticsChart.hideLoading();
 		couponStatisticsChart.setOption({
 			legend : { // 图例

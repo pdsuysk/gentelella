@@ -5,8 +5,7 @@ var gulp = require('gulp'),
     sass = require('gulp-ruby-sass'),
     autoprefixer = require('gulp-autoprefixer'),
     browserSync = require('browser-sync').create(),
-    Proxy = require('gulp-connect-proxy'),
-    connect = require('gulp-connect');
+    proxy = require('http-proxy-middleware');
 
 var DEST = 'build/';
 
@@ -40,11 +39,16 @@ gulp.task('sass-minify', function() {
     return compileSASS('custom.min.css', {style: 'compressed'});
 });
 
-// 配置本地服务器
 gulp.task('browser-sync', function() {
+    var apiProxy = proxy('/wx-big-data', {
+      target: 'http://192.168.1.126:8080',
+      changeOrigin: true,
+      logLevel: 'debug'
+    });
     browserSync.init({
         server: {
-            baseDir: './'
+          baseDir: './',
+          middleware: [apiProxy]
         },
         port: 9006,
         startPath: './bigaka/html/index.html'
@@ -60,22 +64,6 @@ gulp.task('watch', function() {
   gulp.watch('src/scss/*.scss', ['sass', 'sass-minify']);
 });
 
-// 配置跨域代理服务器，
-// 例如：请求 http://mkj001.bigaka.com/mkj/api/area/list
-// 可以通过请求 http://localhost:8000/proxy/mkj001.bigaka.com/mkj/api/area/list
-// 实现跨域访问
-gulp.task('server', function() {
-  connect.server({
-    root: 'app',
-    port: 8000,
-    livereload: true,
-    middleware: function (connect, opt) {
-      opt.route = '/proxy';
-      var proxy = new Proxy(opt);
-      return [proxy];
-    }
-  })
-})
 
 // Default Task
-gulp.task('default', ['server', 'browser-sync', 'watch']);
+gulp.task('default', ['browser-sync', 'watch']);
