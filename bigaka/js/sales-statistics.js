@@ -41,6 +41,11 @@ $(function() {
     },
     xAxis: [{
       type: 'category',
+			axisLine: {
+				lineStyle: {
+					color: '#888888'
+				}
+			},
       axisTick: {
         alignWithLabel: true
       },

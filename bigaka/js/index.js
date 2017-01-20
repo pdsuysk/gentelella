@@ -348,7 +348,7 @@ $(function() {
 				top5ShopOrderChart.setOption({
 					yAxis: {
 						data: response.data.map(function(item){
-							return item.sub_store_id
+							return item.store_short_name
 						})
 					},
 					series : [{
@@ -370,7 +370,7 @@ $(function() {
 				top5ShopMoneyChart.setOption({
 					yAxis: {
 						data: response.data.map(function(item){
-							return item.sub_store_id
+							return item.store_short_name
 						})
 					},
 					series : [{

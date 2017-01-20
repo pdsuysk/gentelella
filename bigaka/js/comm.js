@@ -1,5 +1,24 @@
 var ctx = '../../wx-big-data/';
-var storeId = 1899;
+
+var getUrlParam = function (param) {
+  var query = window.location.search.substr(1)
+  var vars = query.split('&')
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split('=')
+    if (pair[0] === param) {
+      return pair[1]
+    }
+  }
+  return false
+}
+
+var storeId = 3890;
+if(getUrlParam('storeid')){
+	window.localStorage.setItem('storeid', getUrlParam('storeid'))
+}
+if(window.localStorage.getItem('storeid')){
+	storeId = window.localStorage.getItem('storeid')
+}
 
 var loadingOption = {
 	text: '',
