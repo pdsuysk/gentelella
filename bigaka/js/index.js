@@ -142,25 +142,19 @@ $(function() {
 				show : false
 			},
 			axisLabel : { // Y轴刻度标签
-				show : false
+				inside: true,
+				textStyle: {
+					color: '#626c91'
+				}
 			},
 			splitLine : { // Y坐标分隔线
 				show : false
 			},
+			z: 2,
 			data: []
 		},
 		series : [{
-			type : 'bar',
-			label: {
-				normal: {
-					show: true,
-					formatter: '{b}',
-					position: [10, 14],
-					textStyle: {
-						color: '#626c91'
-					}
-				}
-			}
+			type : 'bar'
 		}]
 	}
 //	门店top5新增绑定手机会员***************************************************************************************************
@@ -267,59 +261,125 @@ $(function() {
 			bottom : 30
 		},
 		yAxis : {
+			axisLabel : { // Y轴刻度标签
+				show: false
+			},
 			data : []
 		},
 		series : [{
-	        name: '领取量',
-	        type: 'bar',
-	        label: {
-	        	emphasis: {
-					show: true,
-					position: [10, 3],
-					formatter: '{b}',
-					textStyle: {
-						color: '#626c91'
-					}
-				},
+      name: '领取量',
+      type: 'bar',
+      label: {
 				normal: {
 					show: true,
-					position: [10, 3],
+					position: 'insideLeft',
 					formatter: '{b}',
 					textStyle: {
 						color: '#626c91'
 					}
 				}
 			},
-	    },
-	    {
-	        name: '核销量',
-	        type: 'bar',
-	        label: {
-	        	emphasis: {
-					show: true,
-					position: [10, 3],
-					formatter: '{b}',
-					textStyle: {
-						color: '#516b91'
-					}
-				},
+    },
+    {
+      name: '核销量',
+      type: 'bar',
+      label: {
 				normal: {
 					show: true,
-					position: [10, 3],
+					position: 'insideLeft',
 					formatter: '{b}',
 					textStyle: {
 						color: '#516b91'
 					}
 				}
 			},
-	    }]
+    }]
 	})); // 生效配置
 
-	$.ajax({
-		url: ctx + 'OrderStoreDateAction/getOSDListByParentId.do?parentStoreId=1624',
-		type: 'post',
-		success: function () {
+// 设置数据 *********************************************************************
+// moment.js获取时间
+	var nowDateFormat = moment().format('YYYY-MM-DD'); // 今天
+	var last7DayDateFormat = moment().subtract(6, 'days').format('YYYY-MM-DD'); // 七天前
 
+	// 7天总订单数和销售额
+	$.ajax({
+		url: ctx + 'OrderStoreDateAction/getOSDTotal.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				$('#7daysTotalOrderNum').text(response.data.orderPaidNumberTotal);
+				$('#7daysTotalOrderPrice').text((response.data.orderPaidTotal / 100).toFixed(2));
+			}
+		}
+	})
+	// 七天每日订单数和金额总数据
+	$.ajax({
+		url: ctx + 'OrderStoreDateAction/getStoreTotalListByDate.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				daysNewOrderChart.hideLoading();
+				daysNewOrderChart.setOption({
+					series : [{
+						data : response.data.map(function(item){
+							return item.orderPaidNumberTotal
+						})
+					}]
+				});
+
+				daysNewMoneyChart.hideLoading();
+				daysNewMoneyChart.setOption({
+					series : [{
+						data : response.data.map(function(item){
+							return item.orderPaidTotal
+						})
+					}]
+				});
+			}
+		}
+	})
+	// 7天门店订单数top5
+	$.ajax({
+		url: ctx + 'OrderStoreDateAction/getStoreTotalList.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat + '&orderBy=orderPaidNumberTotal&size=5',
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				top5ShopOrderChart.hideLoading();
+				top5ShopOrderChart.setOption({
+					yAxis: {
+						data: response.data.map(function(item){
+							return item.sub_store_id
+						})
+					},
+					series : [{
+						data : response.data.map(function(item){
+							return item.orderPaidNumberTotal
+						})
+					}]
+				});
+			}
+		}
+	})
+	// 7天门店销售额top5
+	$.ajax({
+		url: ctx + 'OrderStoreDateAction/getStoreTotalList.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat + '&orderBy=orderPaidTotal&size=5',
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				top5ShopMoneyChart.hideLoading();
+				top5ShopMoneyChart.setOption({
+					yAxis: {
+						data: response.data.map(function(item){
+							return item.sub_store_id
+						})
+					},
+					series : [{
+						data : response.data.map(function(item){
+							return (item.orderPaidTotal / 100).toFixed(2)
+						})
+					}]
+				});
+			}
 		}
 	})
 
@@ -345,38 +405,6 @@ $(function() {
 			value: 1000,
 			name: '中山公园店'
 		}];
-		var top5ShopOrderDatas = [{
-			value: 10000,
-			name: '人民广场店'
-		},{
-			value: 8452,
-			name: '徐家汇店'
-		},{
-			value: 7158,
-			name: '马路牙子店'
-		},{
-			value: 5848,
-			name: '南京东路店'
-		},{
-			value: 1000,
-			name: '中山公园店'
-		}];;
-		var top5ShopMoneyDatas = [{
-			value: 10000,
-			name: '人民广场店'
-		},{
-			value: 8452,
-			name: '徐家汇店'
-		},{
-			value: 7158,
-			name: '马路牙子店'
-		},{
-			value: 5848,
-			name: '南京东路店'
-		},{
-			value: 1000,
-			name: '中山公园店'
-		}];;
 
 		var couponStatisticsGetDatas = [10,20,5,20,5,36,10];
 		var couponStatisticsUseDatas = [20,10,36,5,10,20,36];
@@ -419,18 +447,7 @@ $(function() {
 				data : daysNewUserDatas
 			}]
 		});
-		daysNewOrderChart.hideLoading();
-		daysNewOrderChart.setOption({
-			series : [{
-				data : daysNewOrderDatas
-			}]
-		});
-		daysNewMoneyChart.hideLoading();
-		daysNewMoneyChart.setOption({
-			series : [{
-				data : daysNewMoneyDatas
-			}]
-		});
+
 		daysNewCouponChart.hideLoading();
 		daysNewCouponChart.setOption({
 			series : [{
@@ -440,20 +457,13 @@ $(function() {
 
 		top5ShopUserChart.hideLoading();
 		top5ShopUserChart.setOption({
+			yAxis: {
+				data: top5ShopUserDatas.map(function(item){
+					return item.name
+				})
+			},
 			series : [{
 				data : top5ShopUserDatas
-			}]
-		});
-		top5ShopOrderChart.hideLoading();
-		top5ShopOrderChart.setOption({
-			series : [{
-				data : top5ShopOrderDatas
-			}]
-		});
-		top5ShopMoneyChart.hideLoading();
-		top5ShopMoneyChart.setOption({
-			series : [{
-				data : top5ShopMoneyDatas
 			}]
 		});
 

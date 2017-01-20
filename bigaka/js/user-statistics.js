@@ -66,8 +66,7 @@ $(function() {
 		trigger : 'hover'
 	});
 	// 门店会员统计柱状图***************************************************************************************************
-	var shopUsersStatisticsChart = echarts.init(document
-			.getElementById('shopUsersStatistics'));
+	var shopUsersStatisticsChart = echarts.init(document.getElementById('shopUsersStatistics'));
 	pageEcharts.push(shopUsersStatisticsChart);
 	shopUsersStatisticsChart.showLoading('default', loadingOption);
 	shopUsersStatisticsChart.setOption({
@@ -153,7 +152,7 @@ $(function() {
 					formatter : '{b}'
 				}
 			}
-		} ]
+		}]
 	});
 	// 会员漏斗***************************************************************************************************
 	var userFunnelChart = echarts.init(document.getElementById('userFunnel'));
@@ -247,6 +246,8 @@ $(function() {
 		for ( var i = 0; i < 200; i++) {
 			baseShopUsersStatistics1 += 5000 * Math.random() * Math.random();
 			baseShopUsersStatistics2 += 5000 * Math.random() * Math.random();
+			baseShopUsersStatistics1 = 1.05 * baseShopUsersStatistics1;
+			baseShopUsersStatistics2 = 1.05 * baseShopUsersStatistics2;
 			shopUsersStatisticsData.push({
 				value : parseInt(baseShopUsersStatistics1),
 				name : '门店门店门店门店' + Math.random().toFixed(2)
@@ -257,17 +258,19 @@ $(function() {
 			})
 		}
 
+		// 固定显示25个门店
+		var userZoomPercent = 25 / shopUsersStatisticsData.length;
 		shopUsersStatisticsChart.setOption({
 			dataZoom : [ {
 				type : 'inside',
-				start : 0,
+				start : 100 * (1 - userZoomPercent),
 				end : 100
 			}, {
 				type : 'slider',
 				show : true,
 				height : 20,
 				bottom : 10,
-				start : 70,
+				start : 100 * (1 - userZoomPercent),
 				end : 100
 			}, {
 				type : 'slider',
@@ -314,6 +317,7 @@ $(function() {
 				var newPhoneUserData = shopPhoneUsersStatisticsData.concat();
 				if (!event.data.name || event.data.name !== 'selected') { // 选中一个门店
 					if (event.seriesName === '手机会员') {
+						$('#currentShopName').text(shopPhoneUsersStatisticsData[event.dataIndex].name);
 						newPhoneUserData[event.dataIndex] = {
 							value : newPhoneUserData[event.dataIndex].value,
 							name : 'selected',
@@ -343,6 +347,7 @@ $(function() {
 							}
 						}
 					} else if (event.seriesName === '全部会员') {
+						$('#currentShopName').text(shopUsersStatisticsData[event.dataIndex].name);
 						newUserData[event.dataIndex] = {
 							value : newUserData[event.dataIndex].value,
 							name : 'selected',
@@ -372,6 +377,8 @@ $(function() {
 							}
 						}
 					}
+				}else {
+					$('#currentShopName').text('全部门店');
 				}
 				shopUsersStatisticsChart.setOption({
 					series : [ {
@@ -380,8 +387,20 @@ $(function() {
 						data : newPhoneUserData
 					} ]
 				});
+				resetUserChartData();
 			}
 		});
+		$('#showAllUserData').click(function () {
+			shopUsersStatisticsChart.setOption({
+				series : [ {
+					data : shopUsersStatisticsData
+				}, {
+					data : shopPhoneUsersStatisticsData
+				} ]
+			});
+			$('#currentShopName').text('全部门店');
+			resetUserChartData();
+		})
 		// 设置会员漏斗数据-----------------------------------
 		userFunnelChart.hideLoading();
 		userFunnelChart.setOption({

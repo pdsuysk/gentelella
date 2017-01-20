@@ -11,9 +11,11 @@
     <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
   </head>
 
@@ -117,7 +119,69 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-        	
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="chart-panel">
+	        			<div class="chart-title">
+                  <div class="chart-header clearfix">
+                    <span class="chart-header-text">按</span>
+                    <div class="chart-tabs pull-left" style="margin: 0 15px;">
+                      <span class="active" data-value="day">日</span>
+                      <span data-value="week">周</span>
+                      <span data-value="month">月</span>
+                    </div>
+                    <span class="chart-header-text">统计</span>
+
+                    <div class="date-range-selecter pull-right">
+                      <span>自定义：</span>
+                      <div id="everyDateRange" class="pull-right">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        <span>点击选择日期</span>
+                        <b class="caret"></b>
+                      </div>
+                    </div>
+                    <div class="chart-tabs pull-right" id="everyDateChange">
+                      <span class="active" data-value="7">7天</span>
+                      <span data-value="30">30天</span>
+                      <span data-value="90">90天</span>
+                    </div>
+                  </div>
+                </div>
+	        			<div class="chart-content">
+	        				<div class="row">
+	        					<div class="col-xs-12">
+                      <div class="row tile_count">
+                        <div class="col-xs-4 tile_stats_count">
+                          <span class="count_top">订单数</span>
+                          <div><span class="count green" id="totalOrderNum">****</span><span class="count_bottom">单</span></div>
+                        </div>
+                        <div class="col-xs-4 tile_stats_count">
+                          <span class="count_top">销售额</span>
+                          <div><span class="count green" id="totalOrderPrice">****</span><span class="count_bottom">元</span></div>
+                        </div>
+                        <div class="col-xs-4 tile_stats_count">
+                          <span class="count_top">单均价</span>
+                          <div><span class="count green" id="everyOrderPrice">****</span><span class="count_bottom">元/单</span></div>
+                        </div>
+                      </div>
+		        					<div id="salesStatistics" class="large-chart"></div>
+		        				</div>
+	        				</div>
+	        			</div>
+	        		</div>
+
+              <div class="chart-panel">
+	        			<div class="chart-title">退单分析</div>
+	        			<div class="chart-content">
+	        				<div class="row">
+	        					<div class="col-xs-12">
+		        					<div id="returnOrderStatistics" class="large-chart"></div>
+		        				</div>
+	        				</div>
+	        			</div>
+	        		</div>
+            </div>
+          </div>
         </div>
         <!-- /page content -->
 
@@ -138,6 +202,13 @@
     <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+    <!-- Echarts -->
+    <script src="../js/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../../vendors/moment/min/moment.min.js"></script>
+    <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
   	<script src="../js/sales-statistics.js" type="text/javascript" charset="utf-8"></script>
 
   </body>

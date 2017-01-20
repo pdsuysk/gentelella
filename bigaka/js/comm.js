@@ -1,4 +1,5 @@
-var ctx = '../../wx-big-data/'
+var ctx = '../../wx-big-data/';
+var storeId = 1899;
 
 var loadingOption = {
 	text: '',
@@ -8,7 +9,6 @@ var loadingOption = {
 	zlevel: 0
 }
 var dateRangeOption = {
-	endDate: moment(),
 	minDate: '01/01/2000',
 	maxDate: new Date(),
 	showDropdowns: true,

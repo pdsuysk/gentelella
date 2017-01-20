@@ -15,7 +15,7 @@
     <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
   </head>
 
@@ -153,11 +153,13 @@
               <span class="count_bottom pull-right">30.11%</span>
             </div>
           </div>
-          
+
           <div class="row">
         		<div class="col-xs-12">
 	        		<div class="chart-panel">
-	        			<div class="chart-title">门店会员统计<p class="tips">*门店累计会员排名，图表可缩放和拖拽，点击一条数据可查看对应门店会员转化及增长趋势</p></div>
+	        			<div class="chart-title">门店会员统计<p class="tips">*门店累计会员排名，图表可缩放和拖拽，点击一条数据可查看对应门店会员转化及增长趋势</p>
+                  <button class="btn btn-success pull-right" style="margin:10px 0 0 0;" id="showAllUserData">全部门店</button>
+                </div>
 	        			<div class="chart-content">
 	        				<div class="row">
 	        					<div class="col-xs-12">
@@ -166,9 +168,9 @@
 	        				</div>
 	        			</div>
 	        		</div>
-	        		
+
 	        		<div class="chart-panel">
-	        			<div class="chart-title">全部门店-会员数据分析</div>
+	        			<div class="chart-title"><span id="currentShopName">全部门店</span>-会员数据分析</div>
 	        			<div class="chart-content">
 	        				<div class="row">
 	        					<div class="col-lg-5 col-sm-6 col-xs-12">
@@ -229,7 +231,7 @@
     <!-- bootstrap-daterangepicker -->
     <script src="../../vendors/moment/min/moment.min.js"></script>
     <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-    
+
     <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
   	<script src="../js/user-statistics.js" type="text/javascript" charset="utf-8"></script>
 

@@ -15,7 +15,7 @@
     <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
   </head>
 
@@ -120,10 +120,18 @@
         <div class="right_col" role="main">
         	<div class="row">
         		<div class="col-xs-12">
-	        		<div class="chart-panel">
+              <div class="chart-panel">
 	        			<div class="chart-title">会员标签分布&nbsp;<a class="tips-icon" id="userTagTips"><i class="fa fa-question-circle"></i></a></div>
 	        			<div class="chart-content">
 		        					<div id="userTag" class="large-chart"></div>
+	        			</div>
+	        		</div>
+              <div class="chart-panel">
+	        			<div class="chart-title">会员城市分布&nbsp;<a class="tips-icon" id="userCityTips"><i class="fa fa-question-circle"></i></a>
+                  <p class="tips">*地图可以鼠标拖拽和滚轮缩放；并支持自定义框选区域</p>
+                </div>
+	        			<div class="chart-content">
+		        					<div id="userCity" class="xlarge-chart"></div>
 	        			</div>
 	        		</div>
 	        	</div>
@@ -148,12 +156,13 @@
     <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Echarts -->
     <script src="../js/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/echarts/map/china.js" charset="utf-8"></script>
     <!-- bootstrap-daterangepicker -->
     <script src="../../vendors/moment/min/moment.min.js"></script>
     <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
-    
+
     <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
   	<script src="../js/user-subdivision.js" type="text/javascript" charset="utf-8"></script>
 

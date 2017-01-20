@@ -8,6 +8,9 @@ a {
 body .container.body .right_col {
 	margin-bottom: 49px !important;
 }
+.btn {
+	padding: 4px 12px;
+}
 .main_menu .fa {
 	float: left;
 	margin-top: 1px;
@@ -100,6 +103,9 @@ body .container.body .right_col {
 .large-chart {
 	height: 400px;
 }
+.xlarge-chart {
+	height: 700px;
+}
 /*会员漏斗消费会员百分比*/
 .custom-user-percent {
 	display: none;
@@ -114,10 +120,11 @@ body .container.body .right_col {
 
 .chart-header {
   margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 31px;
 }
 .chart-header .tips-icon {
 	display: inline-block;
-  margin-top: 6px;
 }
 .chart-header .chart-header-text {
 	line-height: 31px;
@@ -136,9 +143,6 @@ body .container.body .right_col {
 .daterangepicker .calendar {
 	max-width: 284px;
 }
-.daterangepicker .ranges .range_inputs button {
-	padding: 4px 12px;
-}
 .date-range-selecter {
 	display: inline-block;
 }
@@ -153,6 +157,7 @@ body .container.body .right_col {
 	padding: 5px 10px;
 	border: 1px solid #ccc;
   width: 200px;
+  line-height: 19px;
 }
 .date-range-selecter>div i.fa-calendar {
   float: left;
