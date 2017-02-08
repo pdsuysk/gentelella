@@ -1,4 +1,5 @@
 test
+test
 # gentelella
 
 Gentellela Admin is a free to use Bootstrap admin template.
@@ -16,7 +17,7 @@ We would love to see how you use this awesome admin template. You can notify us 
 
 ## Installation via Package Manger
 
-Our goal is to make it installable on different Package Manager! Do you want to use it on your favorite Package Manager and you know how? Pull request all the way! 
+Our goal is to make it installable on different Package Manager! Do you want to use it on your favorite Package Manager and you know how? Pull request all the way!
 
 As of now, this is some installation available:
 
