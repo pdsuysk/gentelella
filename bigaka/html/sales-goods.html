@@ -11,6 +11,8 @@
     <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
     
@@ -114,7 +116,38 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-        	
+        	<div class="row">
+            <div class="col-xs-12">
+              <div class="chart-panel">
+	        			<div class="chart-title">
+                  <div class="chart-header clearfix">
+                    <span class="chart-header-text">商品销售占比</span>
+
+                    <div class="date-range-selecter pull-right">
+                      <span>自定义：</span>
+                      <div id="everyDateRange" class="pull-right">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        <span>点击选择日期</span>
+                        <b class="caret"></b>
+                      </div>
+                    </div>
+                    <div class="chart-tabs pull-right" id="everyDateChange">
+                      <span class="active" data-value="7">7天</span>
+                      <span data-value="30">30天</span>
+                      <span data-value="90">90天</span>
+                    </div>
+                  </div>
+                </div>
+	        			<div class="chart-content">
+	        				<div class="row">
+	        					<div class="col-xs-12">
+		        					<div id="goodsTop10Statistics" class="large-chart"></div>
+		        				</div>
+	        				</div>
+	        			</div>
+	        		</div>
+          	</div>
+        	</div>
         </div>
         <!-- /page content -->
 
@@ -135,6 +168,14 @@
     <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+    <!-- Echarts -->
+    <script src="../js/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../../vendors/moment/min/moment.min.js"></script>
+    <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
+  	<script src="../js/sales-goods.js" type="text/javascript" charset="utf-8"></script>
 
   </body>
 </html>
