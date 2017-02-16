@@ -186,3 +186,19 @@ body .container.body .right_col {
 .chart-tabs>span:last-child {
 	border-right: 0;
 }
+
+.table-search {
+	
+}
+.table-search .reset-search {
+	float: right;
+	  line-height: 34px;
+  margin: 0 10px 0 0;
+}
+.table-search .btn-search {
+	float: right;
+	margin: 2px 0;
+}
+.table-search .tips {
+	margin: 0 0 10px 0;
+}

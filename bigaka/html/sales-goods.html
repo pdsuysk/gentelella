@@ -13,6 +13,12 @@
     <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="../../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
     
@@ -145,6 +151,52 @@
 		        				</div>
 	        				</div>
 	        			</div>
+	        			<div class="table-panel">
+	        				<div class="table-search form-horizontal">
+	        					<div class="form-group clearfix">
+                      <label class="control-label pull-left" for="productName">商品/活动名称：</label>
+                      <div class="col-md-5 col-sm-5 col-xs-12">
+                        <input type="text" id="productName" placeholder="请输入商品/活动名称" class="form-control col-md-7 col-xs-12">
+                      </div>
+                      <button class="btn btn-success btn-search">查询</button>
+                      <a class="reset-search">重置</a>
+                    </div>
+                    <p class="tips">*点击选择商品/活动，查看指定商品/活动销售趋势</p>
+	        				</div>
+	        				<table id="productTable" class="table table-hover">
+	        					<thead>
+	        						<tr>
+	        							<th>商品/活动名称</th>
+	        							<th>商品编码</th>
+	        							<th>销量</th>
+	        							<th>销售额</th>
+	        							<th>销量累计占比</th>
+	        							<th>销售额累计占比</th>
+	        						</tr>
+	        					</thead>
+	        					<tbody>
+	        					</tbody>
+	        				</table>
+	        			</div>
+	        			<div class="chart-title">
+	        				<span id="activeGoodsName">XX商品/活动</span>-销售趋势
+	        				<div class="chart-header clearfix pull-right">
+	                  <span class="chart-header-text">按</span>
+	                  <div class="chart-tabs pull-left" id="goodTrendType" style="margin: 0 15px;">
+	                    <span class="active" data-value="0">日</span>
+	                    <span data-value="1">周</span>
+	                    <span data-value="2">月</span>
+	                  </div>
+	                  <span class="chart-header-text">统计</span>
+	                </div>
+	        			</div>
+	        			<div class="chart-content">
+	        				<div class="row">
+	        					<div class="col-xs-12">
+		        					<div id="goodsTrendStatistics" class="large-chart"></div>
+		        				</div>
+	        				</div>
+	        			</div>
 	        		</div>
           	</div>
         	</div>
@@ -173,6 +225,22 @@
     <!-- bootstrap-daterangepicker -->
     <script src="../../vendors/moment/min/moment.min.js"></script>
     <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Datatables -->
+    <script src="../../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../../vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>
+    <script src="../../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../../vendors/pdfmake/build/vfs_fonts.js"></script>
 
     <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
   	<script src="../js/sales-goods.js" type="text/javascript" charset="utf-8"></script>
