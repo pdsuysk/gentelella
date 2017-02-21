@@ -41,7 +41,7 @@ gulp.task('sass-minify', function() {
 
 gulp.task('browser-sync', function() {
     var apiProxy = proxy('/wx-big-data', {
-      target: 'http://192.168.1.126:8080',
+      target: 'http://company1.bigaka.com:9101',
       changeOrigin: true,
       logLevel: 'debug'
     });
