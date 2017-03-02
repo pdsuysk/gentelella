@@ -173,9 +173,46 @@
               <div class="chart-panel">
 	        			<div class="chart-title">退单分析</div>
 	        			<div class="chart-content">
-	        				<div class="row">
-	        					<div class="col-xs-12">
-		        					<div id="returnOrderStatistics" class="large-chart"></div>
+                  <div class="row return-order-info">
+                    <div class="col-sm-3 col-xs-12">
+                      <h3>退单数</h3>
+                      <h4><span id="ORApplyNumberTotal">XXXX</span>单</h4>
+                      <p class="clearfix">
+                        <span class="pull-left">占累计订单比</span>
+                        <span class="pull-right"><span id="ORNumberPercent">****</span>%</span>
+                      </p>
+                      <p class="clearfix">
+                        <span class="pull-left">处理中</span>
+                        <span class="pull-right"><span id="ORunOverNumberTotal">****</span>单</span>
+                      </p>
+                      <p class="clearfix">
+                        <span class="pull-left">已退款</span>
+                        <span class="pull-right"><span id="OROverNumberTotal">****</span>单</span>
+                      </p>
+                    </div>
+	        					<div class="col-sm-9 col-xs-12">
+		        					<div id="returnOrderNumberStatistics" class="large-chart"></div>
+		        				</div>
+	        				</div>
+                  <div class="row return-order-info">
+                    <div class="col-sm-3 col-xs-12">
+                      <h3>退款金额</h3>
+                      <h4><span id="ORAckAcountTotal">XXXX</span>元</h4>
+                      <p class="clearfix">
+                        <span class="pull-left">占累计销售额比</span>
+                        <span class="pull-right"><span id="ORAcountPercent">****</span>%</span>
+                      </p>
+                      <p class="clearfix">
+                        <span class="pull-left">处理中</span>
+                        <span class="pull-right"><span id="ORunAcountTotal">****</span>元</span>
+                      </p>
+                      <p class="clearfix">
+                        <span class="pull-left">已退款</span>
+                        <span class="pull-right"><span id="ORAcountTotal">****</span>元</span>
+                      </p>
+                    </div>
+	        					<div class="col-sm-9 col-xs-12">
+		        					<div id="returnOrderMoneyStatistics" class="large-chart"></div>
 		        				</div>
 	        				</div>
 	        			</div>

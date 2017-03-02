@@ -15,57 +15,10 @@ $(function() {
     $(window).resize(function() {
         resetCharts();
     });
-
- // 初始化品类矩形树状chart
+    // 初始化品类矩形树状chart
     window.categoryRectangleStatisticsChart = echarts.init(document.getElementById('categoryRectangleStatistics'));
     pageEcharts.push(categoryRectangleStatisticsChart);
     categoryRectangleStatisticsChart.showLoading('default', loadingOption);
-    //获取树图数据
-     function getCategoryRectangle(startDateFormat, endDateFormat) {
-        if(!startDateFormat) {
-            startDateFormat = curStartDate
-        }
-        if(!endDateFormat) {
-            endDateFormat = curEndDate
-        }
-        if(mode==0){//商品导航
-            url=ctx + 'GuideOrderAction/getGuideTotalListByParentStoreIdAction.do?storeId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
-        }else if(mode==1){
-            url=ctx + '/GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
-        }
-        categoryRectangleStatisticsChart.showLoading('default', loadingOption);
-        $.ajax({
-            url:url,
-            type: 'post',
-            success: function(response) {
-                if(response.code === 0) {
-                    categoryRectangleStatisticsChart.hideLoading();
-
-                }
-            }
-        })
-    }
-     function createSeriesCommon() {
-        return {
-            type: 'treemap',
-            label: {
-                show: true,
-                formatter: "",
-                normal: {
-                    textStyle: {
-                        ellipsis: true
-                    }
-                }
-            },
-            itemStyle: {
-                normal: {
-                    borderColor: 'black'
-                }
-            }
-        };
-    }
-
-    var modes = ['销量', '销售额'];
     categoryRectangleStatisticsChart.setOption({
         title: {
             show: false,
@@ -74,7 +27,7 @@ $(function() {
         tooltip: {},
         legend: {
             show: true,
-            data: modes,
+            data: ['销量', '销售额'],
             selected: {
                 '销量': true,
                 '销售额': false
@@ -84,34 +37,84 @@ $(function() {
             top: 0,
             left:0
         },
-        series: modes.map(function (mode, idx) {
-            var seriesOpt = createSeriesCommon();
-            seriesOpt.name = mode;
-            seriesOpt.top = 30;
-            seriesOpt.leafDepth =3,
-            seriesOpt.data =data;
-            return seriesOpt;
-        })
-
+        series: [{
+            name: '销量',
+            type: 'treemap',
+            visibleMin: 300,
+            leafDepth: 2,
+            levels: [
+                {
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#555',
+                            borderWidth: 4,
+                            gapWidth: 4
+                        }
+                    }
+                },
+                {
+                    colorSaturation: [0.3, 0.6],
+                    itemStyle: {
+                        normal: {
+                            borderColorSaturation: 0.7,
+                            gapWidth: 2,
+                            borderWidth: 2
+                        }
+                    }
+                },
+                {
+                    colorSaturation: [0.3, 0.5],
+                    itemStyle: {
+                        normal: {
+                            borderColorSaturation: 0.6,
+                            gapWidth: 1
+                        }
+                    }
+                },
+                {
+                    colorSaturation: [0.3, 0.5]
+                }
+            ]
+        },{
+            name: '销售额',
+            type: 'treemap',
+            visibleMin: 300,
+            leafDepth: 2,
+            levels: [
+                {
+                    itemStyle: {
+                        normal: {
+                            borderColor: '#555',
+                            borderWidth: 4,
+                            gapWidth: 4
+                        }
+                    }
+                },
+                {
+                    colorSaturation: [0.3, 0.6],
+                    itemStyle: {
+                        normal: {
+                            borderColorSaturation: 0.7,
+                            gapWidth: 2,
+                            borderWidth: 2
+                        }
+                    }
+                },
+                {
+                    colorSaturation: [0.3, 0.5],
+                    itemStyle: {
+                        normal: {
+                            borderColorSaturation: 0.6,
+                            gapWidth: 1
+                        }
+                    }
+                },
+                {
+                    colorSaturation: [0.3, 0.5]
+                }
+            ]
+        }]
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // 初始化商品top10chart
     window.categoryTop10StatisticsChart = echarts.init(document.getElementById('categoryTop10Statistics'));
     pageEcharts.push(categoryTop10StatisticsChart);
@@ -201,6 +204,52 @@ $(function() {
             legendHoverLink: false
         }]
     });
+    // 处理树图数据
+    function convertTreeData(treeData, valueKey){
+      return treeData.map(function(guide){
+        var tempData = {
+          name: guide.guideName,
+          value: valueKey === 'guideSaleAmount' ? (guide.guideSaleAmount/100).toFixed(2) :guide[valueKey],
+        }
+        if (typeof(guide.guideData) === 'object' && guide.guideData.length > 0) {
+          tempData.children = convertTreeData(guide.guideData, valueKey);
+        }
+        return tempData;
+      });
+    }
+    // 获取树图数据
+    function getCategoryRectangle(startDateFormat, endDateFormat) {
+      if(!startDateFormat) {
+          startDateFormat = curStartDate
+      }
+      if(!endDateFormat) {
+          endDateFormat = curEndDate
+      }
+      if(mode==0){//商品导航
+          url=ctx + 'GuideOrderAction/getGuideTotalListByParentStoreIdAction.do?storeId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+      }else if(mode==1){
+          url=ctx + '/GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+      }
+      categoryRectangleStatisticsChart.showLoading('default', loadingOption);
+      $.ajax({
+          url:url,
+          type: 'post',
+          success: function(response) {
+              if(response.code === 0) {
+                  categoryRectangleStatisticsChart.hideLoading();
+                  console.log(convertTreeData(response.data, 'guideSaleNumber'));
+                  console.log(convertTreeData(response.data, 'guideSaleAmount'));
+                  categoryRectangleStatisticsChart.setOption({
+                    series: [{
+                      data: convertTreeData(response.data, 'guideSaleNumber')
+                    }, {
+                      data: convertTreeData(response.data, 'guideSaleAmount')
+                    },]
+                  });
+              }
+          }
+      })
+    }
     // 获取导航数据
     function getTop10Category(parentGuideId,startDateFormat, endDateFormat) {
         if(!startDateFormat) {

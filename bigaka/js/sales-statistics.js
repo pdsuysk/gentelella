@@ -117,22 +117,97 @@ $(function() {
     ],
     series: []
   });
+	// 退单分析chart
+	var returnOrderNumberStatisticsChart = echarts.init(document.getElementById('returnOrderNumberStatistics'));
+	pageEcharts.push(returnOrderNumberStatisticsChart);
+	returnOrderNumberStatisticsChart.showLoading('default', loadingOption);
 
+	var returnOrderMoneyStatisticsChart = echarts.init(document.getElementById('returnOrderMoneyStatistics'));
+	pageEcharts.push(returnOrderMoneyStatisticsChart);
+	returnOrderMoneyStatisticsChart.showLoading('default', loadingOption);
+
+	returnOrderColor = [ '#1ABB9C', '#7bd9a5', '#3fb1e3' ];
+	returnOrderOption = {
+    title: {
+      show: false
+    },
+		color: returnOrderColor,
+    tooltip : {
+      trigger: 'axis'
+    },
+    legend: {
+      data:['处理中','已退款'],
+			top: 0
+    },
+    grid: {
+      left: '30',
+			top: '40',
+      right: '40',
+      bottom: '30',
+      containLabel: true
+    },
+    xAxis : [
+      {
+				axisLine: {
+					lineStyle: {
+						color: '#888888'
+					}
+				},
+        type : 'category',
+        boundaryGap : false,
+        data : []
+      }
+    ],
+    yAxis : [
+      {
+				axisLine: {
+					lineStyle: {
+						color: '#888888'
+					}
+				},
+				splitLine : {
+					lineStyle : {
+						type : 'dashed'
+					}
+				},
+        type : 'value'
+      }
+    ],
+    series : [
+      {
+        name:'处理中',
+        type:'line',
+        areaStyle: {normal: {}},
+        data:[]
+      },
+      {
+        name:'已退款',
+        type:'line',
+        areaStyle: {normal: {}},
+        data:[]
+      }
+		]
+	};
+	returnOrderNumberStatisticsChart.setOption(returnOrderOption);
+	returnOrderMoneyStatisticsChart.setOption(returnOrderOption);
 
 	getTotalOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 	getEveryOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+	getReturnOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 	$('#everyDateRange').daterangepicker(dateRangeOption);
 	$('#everyDateRange').on('apply.daterangepicker', function(ev, picker) {
 			$('#everyDateRange span').html(picker.startDate.format('YYYY.MM.DD') + ' - ' + picker.endDate.format('YYYY.MM.DD'));
 			$('#everyDateChange span').removeClass('active');
 			getTotalOrderData(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
 			getEveryOrderData(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
+			getReturnOrderData(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
 		});
 	$('#everyDateChange span').click(function(){
 		$('#everyDateRange span').html('点击选择日期');
 		var dateRange = parseInt($(this).attr('data-value'));
 		getTotalOrderData(moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 		getEveryOrderData(moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+		getReturnOrderData(moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 	})
 	// 总订单数和销售额
 	function getTotalOrderData (startDateFormat, endDateFormat) {
@@ -145,6 +220,23 @@ $(function() {
 					$('#totalOrderPrice').text((response.data.orderPaidTotal / 100).toFixed(2));
 					$('#everyOrderPrice').text((response.data.orderPaidTotal / response.data.orderPaidNumberTotal / 100).toFixed(2))
 				}
+				$.ajax({
+					url: ctx + 'ReturnOrderStoreDateAction/getReturnOrderTotalByPStroeAndDate.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
+					type: 'post',
+					success: function (response_) {
+						if (response_.code === 0) {
+							$('#ORApplyNumberTotal').text(response_.data.ORApplyNumberTotal);
+							$('#ORunOverNumberTotal').text(response_.data.ORApplyNumberTotal - response_.data.OROverNumberTotal);
+							$('#OROverNumberTotal').text(response_.data.OROverNumberTotal);
+							$('#ORNumberPercent').text((response_.data.ORApplyNumberTotal/response.data.orderPaidNumberTotal*100).toFixed(2));
+
+							$('#ORAckAcountTotal').text((response_.data.ORAckAcountTotal/100).toFixed(2));
+							$('#ORunAcountTotal').text(((response_.data.ORAckAcountTotal - response_.data.ORAcountTotal)/100).toFixed(2));
+							$('#ORAcountTotal').text((response_.data.ORAcountTotal).toFixed(2));
+							$('#ORAcountPercent').text((response_.data.ORAckAcountTotal/response.data.orderPaidTotal*100).toFixed(2));
+						}
+					}
+				});
 			}
 		})
 	}
@@ -190,5 +282,52 @@ $(function() {
 				}
 			}
 		})
+	}
+	// 退单数据
+	function getReturnOrderData (startDateFormat, endDateFormat) {
+		returnOrderNumberStatisticsChart.showLoading('default', loadingOption);
+		$.ajax({
+			url: ctx + 'ReturnOrderStoreDateAction/getReturnOrderTotalListByDate.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
+			type: 'post',
+			success: function (response) {
+				if (response.code === 0) {
+					returnOrderNumberStatisticsChart.hideLoading();
+					returnOrderNumberStatisticsChart.setOption({
+						xAxis: {
+							data: response.data.map(function(item){
+								return item.dateTime
+							})
+						},
+						series: [{
+							data: response.data.map(function(item){
+								return item.ORApplyNumberTotal - item.OROverNumberTotal
+							})
+						}, {
+							data: response.data.map(function(item){
+								return item.OROverNumberTotal
+							})
+						}]
+					});
+
+					returnOrderMoneyStatisticsChart.hideLoading();
+					returnOrderMoneyStatisticsChart.setOption({
+						xAxis: {
+							data: response.data.map(function(item){
+								return item.dateTime
+							})
+						},
+						series: [{
+							data: response.data.map(function(item){
+								return item.ORAckAcountTotal - item.ORAcountTotal
+							})
+						}, {
+							data: response.data.map(function(item){
+								return item.ORAcountTotal
+							})
+						}]
+					});
+				}
+			}
+		});
 	}
 })
