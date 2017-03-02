@@ -89,6 +89,9 @@ body .container.body .right_col {
 	left: 0;
 	top: 0;
 }
+.chart-panel.no-title-panel:before {
+  display: none;
+}
 .chart-panel .chart-title {
   line-height: 36px;
   font-size: 16px;
@@ -194,7 +197,7 @@ body .container.body .right_col {
 }
 .table-search .reset-search {
 	float: right;
-	  line-height: 34px;
+  line-height: 34px;
   margin: 0 10px 0 0;
 }
 .table-search .btn-search {
@@ -203,4 +206,51 @@ body .container.body .right_col {
 }
 .table-search .tips {
 	margin: 0 0 10px 0;
+}
+
+/* 优惠券分析头部表格 */
+.coupon-total-section {
+  text-align: center;
+}
+.coupon-total-section .row {
+  margin: 15px 0;
+}
+.coupon-total-section .row .pull-right {
+  font-size: 16px;
+}
+.coupon-total-section .section-title {
+  font-size: 16px;
+}
+.coupon-total-section .section-title .pull-right {
+  font-size: 14px;
+}
+.coupon-total-section .section-title .title-text {
+
+}
+.coupon-total-section .section-title .section-title-info {
+
+}
+.icheckbox_flat-green, .iradio_flat-green {
+  width: 16px;
+  height: 16px;
+  background-size: auto 17px;
+}
+.icheckbox_flat-green.checked {
+    background-position: -17px 0;
+}
+.status-tag {
+  display: inline-block;
+  background: #dddddd;
+  color: #ffffff;
+  border-radius: 5px;
+  padding: 0 10px;
+  font-size: 12px;
+  line-height: 18px;
+  margin-left: 10px;
+}
+.footer_fixed footer {
+  z-index: 9;
+}
+.nav-md .container.body .col-md-3.left_col.menu_fixed {
+  z-index: 10;
 }

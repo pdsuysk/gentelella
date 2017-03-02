@@ -63,10 +63,10 @@ $(function(){
 			}]
 		},
 		grid : { // 网格
-			left: '1%',
+			left: 10,
 			top: 40,
       right: 20,
-      bottom: 20,
+      bottom: 10,
       containLabel: true
 		},
 		xAxis : {
@@ -752,57 +752,47 @@ $(function(){
 
 
 	// 设置会员标签数据
-	var userTagPhoneData = [{
-		value: 1438,
-		name: '标签一'
-	},{
-		value: 866,
-		name: '标签二'
-	},{
-		value: 1048,
-		name: '标签三'
-	},{
-		value: 566,
-		name: '标签四'
-	},{
-		value: 1255,
-		name: '标签五'
-	},{
-		value: 788,
-		name: '标签六'
-	}];
-	var userTagWchatData = [{
-		value: 866,
-		name: '标签一'
-	},{
-		value: 566,
-		name: '标签二'
-	},{
-		value: 1255,
-		name: '标签三'
-	},{
-		value: 788,
-		name: '标签四'
-	},{
-		value: 1438,
-		name: '标签五'
-	},{
-		value: 1048,
-		name: '标签六'
-	}];
-	setTimeout(function(){
-		userTagChart.hideLoading();
-		userTagChart.setOption({
-			yAxis : {
-				data : userTagWchatData.map(function(item) {
-					return item.name
-				})
-			},
-			series : [{
-				data : userTagPhoneData
-			},{
-				data: userTagWchatData
-			}]
-		});
-	}, 1000)
+	$.ajax({
+		url: ctx + 'CustomerMarkAction/getCustomerMarksTotalByParentStoreId.do?parentStoreId=' + storeId + '&orderBy=customerTotal',
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				userTagChart.hideLoading();
+				userTagChart.setOption({
+					yAxis : {
+						data : response.data.map(function(item) {
+							return item.markName
+						})
+					},
+					series : [{
+						data : response.data.map(function(item) {
+							return item.phoneCustomerTotal
+						})
+					},{
+						data: response.data.map(function(item) {
+							return item.weixinCustomerTotal
+						})
+					}]
+				});
+			}
+		}
+	})
+	// 设置会员城市数据
+	// $.ajax({
+	// 	url: ctx + 'CustomerCityAction/getCustomerCityTotalListAction.do?parentStoreId=' + storeId,
+	// 	type: 'post',
+	// 	success: function (response ) {
+	// 		if (response.code === 0) {
+	// 			console.log([
+	// 			    convertData1111(response.data),
+	// 			    convertData1111(response.data.sort(function (a, b) {
+	// 			        return b.value - a.value;
+	// 			    }).slice(0, 6)),
+	// 					convertData1111(response.data).sort(function (a, b) {
+	// 			        return b.value - a.value;
+	// 			    }).slice(0, 21)
+	// 			])
+	// 		}
+	// 	}
+	// })
 })

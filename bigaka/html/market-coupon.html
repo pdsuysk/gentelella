@@ -11,9 +11,19 @@
     <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="../../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="../../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
   </head>
 
@@ -113,7 +123,200 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-        	
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="chart-panel no-title-panel">
+                <div class="chart-content">
+                  <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                      <div class="coupon-total-section">
+                        <h4 class="section-title green">进行中</h4>
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <span class="pull-left">优惠券</span>
+                            <span class="pull-right"><span id="activeKindNumber">****</span>个</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="pull-left">发放量</span>
+                            <span class="pull-right"><span id="activeQuantityTotal">****</span>张</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <span class="pull-left">已领取</span>
+                            <span class="pull-right"><span id="activeCollectNumber">****</span>张</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="pull-left">平均领取率</span>
+                            <span class="pull-right"><span id="activeCollectPercent">****</span>%</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <span class="pull-left">已核销</span>
+                            <span class="pull-right"><span id="activeAppliedNumber">****</span>张</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="pull-left">平均核销率</span>
+                            <span class="pull-right"><span id="activeAppliedPercent">****</span>%</span>
+                          </div>
+                        </div>
+
+                        <div class="middle-chart" id="activeCouponFunnel"></div>
+
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <span class="pull-left">转化订单数</span>
+                            <span class="pull-right"><span id="activeOrderNumber">****</span>个</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <span class="pull-left">转化订单金额</span>
+                            <span class="pull-right"><span id="activeOrderMoney">****</span>元</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <span class="pull-left">总优惠金额</span>
+                            <span class="pull-right"><span id="activePrefeMoney">****</span>元</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                      <div class="coupon-total-section">
+                        <h4 class="section-title">
+                          <span class="title-text green">所有优惠券</span>
+                          <a class="section-title-info" id="allCouponTips">
+                          	<i class="fa fa-question-circle"></i>
+                          </a>
+                          <div class="pull-right">
+                            <input class="flat" type="checkbox" id="showUnableCheck"/>
+                            <span>不看未生效</span>
+                          </div>
+                        </h4>
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <span class="pull-left">优惠券</span>
+                            <span class="pull-right"><span id="allKindNumber">****</span>个</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="pull-left">发放量</span>
+                            <span class="pull-right"><span id="allQuantityTotal">****</span>张</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <span class="pull-left">已领取</span>
+                            <span class="pull-right"><span id="allCollectNumber">****</span>张</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="pull-left">平均领取率</span>
+                            <span class="pull-right"><span id="allCollectPercent">****</span>%</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-6">
+                            <span class="pull-left">已核销</span>
+                            <span class="pull-right"><span id="allAppliedNumber">****</span>张</span>
+                          </div>
+                          <div class="col-xs-6">
+                            <span class="pull-left">平均核销率</span>
+                            <span class="pull-right"><span id="allAppliedPercent">****</span>%</span>
+                          </div>
+                        </div>
+
+                        <div class="middle-chart" id="allCouponFunnel"></div>
+
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <span class="pull-left">转化订单数</span>
+                            <span class="pull-right"><span id="allOrderNumber">****</span>个</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <span class="pull-left">转化订单金额</span>
+                            <span class="pull-right"><span id="allOrderMoney">****</span>元</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-12">
+                            <span class="pull-left">总优惠金额</span>
+                            <span class="pull-right"><span id="allPrefeMoney">****</span>元</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="chart-panel">
+	        			<div class="chart-title">
+                  <div class="chart-header clearfix">
+                    <div class="chart-tabs pull-left" id="couponStatusChange">
+                      <span class="active" data-value="1">所有优惠券</span>
+                      <span data-value="3">已生效</span>
+                      <span data-value="4">已失效</span>
+                    </div>
+                    <div class="pull-left">
+                      <input class="flat" type="checkbox" id="tableShowUnableCheck"/>
+                      <span>不看未生效</span>
+                    </div>
+
+                    <div class="date-range-selecter pull-right">
+                      <span>自定义：</span>
+                      <div id="everyDateRange" class="pull-right">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                        <span>点击选择日期</span>
+                        <b class="caret"></b>
+                      </div>
+                    </div>
+                    <div class="chart-tabs pull-right" id="everyDateChange">
+                      <span class="active" data-value="7">7天</span>
+                      <span data-value="30">30天</span>
+                      <span data-value="90">90天</span>
+                    </div>
+                  </div>
+                </div>
+	        			<div class="table-panel">
+	        				<table id="couponTable" class="table table-hover">
+	        					<thead>
+	        						<tr>
+	        							<th>优惠券名称</th>
+	        							<th>发放量</th>
+	        							<th>领取量</th>
+	        							<th>核销量</th>
+	        							<th>领取率</th>
+	        							<th>核销率</th>
+                        <th>转化订单数</th>
+                        <th>转化订单金额</th>
+                        <th>总优惠金额</th>
+	        						</tr>
+	        					</thead>
+	        					<tbody>
+	        					</tbody>
+	        				</table>
+	        			</div>
+	        			<div class="chart-title text-center">
+	        				<span id="activeCouponName">XX优惠券</span>-效果分析
+	        			</div>
+                <div class="row">
+                  <div class="col-xs-4">发放量：<span id="oneCouponQuantityTotal">****</span>张</div>
+                  <div class="col-xs-4 text-center">已领取：<span id="oneCouponCollectNumberTotal">****</span>张</div>
+                  <div class="col-xs-4 text-right">已核销：<span id="oneCouponAppliedAmountTotal">****</span>张</div>
+                </div>
+	        			<div class="chart-content">
+	        				<div class="row">
+	        					<div class="col-xs-12">
+		        					<div id="couponTrendStatistics" class="xlarge-chart"></div>
+		        				</div>
+	        				</div>
+	        			</div>
+	        		</div>
+            </div>
+          </div>
         </div>
         <!-- /page content -->
 
@@ -132,8 +335,33 @@
     <script src="../../vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- iCheck -->
+    <script src="../../vendors/iCheck/icheck.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+    <!-- Echarts -->
+    <script src="../js/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../../vendors/moment/min/moment.min.js"></script>
+    <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Datatables -->
+    <script src="../../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../../vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>
+    <script src="../../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../../vendors/pdfmake/build/vfs_fonts.js"></script>
 
+    <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/market-coupon.js" charset="utf-8"></script>
   </body>
 </html>
