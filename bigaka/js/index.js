@@ -340,23 +340,22 @@ $(function() {
 		}
 	})
 	// 七天绑定手机会员数据
-	// $.ajax({
-	// 	url: ctx + 'StoreCustomerAction/getStoreCustomerTotalForDate.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
-	// 	type: 'post',
-	// 	success: function (response) {
-	// 		debugger
-	// 		if (response.code === 0) {
-	// 			daysNewUserChart.hideLoading();
-	// 			daysNewUserChart.setOption({
-	// 				series : [{
-	// 					data : response.data.map(function(item){
-	// 						return item.phoneCustomerTotal
-	// 					})
-	// 				}]
-	// 			});
-	// 		}
-	// 	}
-	// })
+	$.ajax({
+		url: ctx + 'StoreCustomerAction/getParentStoreCustomerTotalForDate.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				daysNewUserChart.hideLoading();
+				daysNewUserChart.setOption({
+					series : [{
+						data : response.data.map(function(item){
+							return item.phoneCustomerTotal
+						})
+					}]
+				});
+			}
+		}
+	})
 	// 7天总订单数和销售额
 	$.ajax({
 		url: ctx + 'OrderStoreDateAction/getOSDTotal.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,

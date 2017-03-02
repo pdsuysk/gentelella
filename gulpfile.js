@@ -40,8 +40,9 @@ gulp.task('sass-minify', function() {
 });
 
 gulp.task('browser-sync', function() {
-    var apiProxy = proxy('/wx-big-data', {
-      target: 'http://company1.bigaka.com:9101',
+    var apiProxy = proxy('/wx_big_data', {
+      target: 'http://test02.bigaka.com',
+      // target: 'http://company1.bigaka.com:9101',
       changeOrigin: true,
       logLevel: 'debug'
     });

@@ -3,6 +3,10 @@ function resetCharts() {
 		this.resize();
 	})
 }
+var curStoreId = storeId;
+var startDateFormat = moment().subtract(6, 'days').format('YYYY-MM-DD');
+var endDateFormat = moment().format('YYYY-MM-DD');
+var showTotalShopData = true;
 $(function() {
 	window.pageEcharts = []; // 记录页面上所有的echart，方便统一resize
 	$('#menu_toggle').on('click', function() {
@@ -238,267 +242,309 @@ $(function() {
 		},
 		series : []
 	});
-	setTimeout(function() {
-		shopUsersStatisticsChart.hideLoading();
-		// 设置门店会员统计相关数据---------------------------------------------------------
-		var shopUsersStatisticsData = [], shopPhoneUsersStatisticsData = [];
-		var baseShopUsersStatistics1 = 100, baseShopUsersStatistics2 = 100;
-		for ( var i = 0; i < 200; i++) {
-			baseShopUsersStatistics1 += 5000 * Math.random() * Math.random();
-			baseShopUsersStatistics2 += 5000 * Math.random() * Math.random();
-			baseShopUsersStatistics1 = 1.05 * baseShopUsersStatistics1;
-			baseShopUsersStatistics2 = 1.05 * baseShopUsersStatistics2;
-			shopUsersStatisticsData.push({
-				value : parseInt(baseShopUsersStatistics1),
-				name : '门店门店门店门店' + Math.random().toFixed(2)
-			});
-			shopPhoneUsersStatisticsData.push({
-				value : parseInt(baseShopUsersStatistics2),
-				name : '门店门店门店门店' + Math.random().toFixed(2)
-			})
-		}
 
-		// 固定显示25个门店
-		var userZoomPercent = 25 / shopUsersStatisticsData.length;
-		shopUsersStatisticsChart.setOption({
-			dataZoom : [ {
-				type : 'inside',
-				start : 100 * (1 - userZoomPercent),
-				end : 100
-			}, {
-				type : 'slider',
-				show : true,
-				height : 20,
-				bottom : 10,
-				start : 100 * (1 - userZoomPercent),
-				end : 100
-			}, {
-				type : 'slider',
-				show : true,
-				yAxisIndex : 0,
-				right : 0,
-				width : 20,
-				start : 0,
-				end : 100
-			} ],
-			xAxis : {
-				data : shopUsersStatisticsData.map(function(item) {
-					return item.name
+	// moment.js获取时间
+	var nowDateFormat = moment().format('YYYY-MM-DD'); // 今天
+	var last7DayDateFormat = moment().subtract(6, 'days').format('YYYY-MM-DD'); // 七天前
+
+	// 会员数据概览
+	$.ajax({ // 获取累计会员数据
+		url: ctx + 'StoreCustomerAction/getStoreCustomerTotalByPid.do?parentStoreId=' + storeId,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				$('#customerTotal').text(response.data.customerTotal);
+				$('#phoneCustomerTotal').text(response.data.phoneCustomerTotal);
+				$('#phoneCustomerPercent').text((response.data.phoneCustomerTotal/response.data.customerTotal*100).toFixed(2));
+				$.ajax({ // 获取累计订单数据
+					url: ctx + 'OrderStoreDateAction/getOSDTotal.do?parentStoreId=' + storeId,
+					type: 'post',
+					success: function (response_o) {
+						if (response_o.code === 0) {
+							$('#customerEveryPrice').text((parseFloat((response_o.data.orderPaidTotal/100).toFixed(2))/response.data.customerTotal).toFixed(2));
+						}
+					}
 				})
-			},
-			series : [ {
-				data : shopUsersStatisticsData
-			}, {
-				data : shopPhoneUsersStatisticsData
-			} ]
-		});
-		shopUsersStatisticsChart.on('legendselectchanged', function(event) { // 切换会员类型时切换X轴
-			if (event.name === '手机会员') {
-				shopUsersStatisticsChart.setOption({
-					xAxis : {
-						data : shopPhoneUsersStatisticsData.map(function(item) {
-							return item.name
-						})
+				$.ajax({ // 获取7天累计会员数据
+					url: ctx + 'StoreCustomerAction/getStoreCustomerTotalByPid.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+					type: 'post',
+					success: function (response_) {
+						if (response_.code === 0) {
+							$('#7DayCustomerTotal').text(response_.data.customerTotal);
+							$('#7DayPhoneCustomerTotal').text(response_.data.phoneCustomerTotal);
+							$('#7DayPhoneCustomerPercent').text((response_.data.phoneCustomerTotal/response_.data.customerTotal*100).toFixed(2));
+							$('#7DayCustomerPercent').text((response_.data.customerTotal/response.data.customerTotal*100).toFixed(2));
+						}
 					}
-				});
-			} else if (event.name === '全部会员') {
-				shopUsersStatisticsChart.setOption({
-					xAxis : {
-						data : shopUsersStatisticsData.map(function(item) {
-							return item.name
-						})
-					}
-				});
+				})
 			}
-		});
-		shopUsersStatisticsChart.on('click', function(event) { // 选中一个门店-------------------------------------
-			if (event.componentType === 'series') {
-				var newUserData = shopUsersStatisticsData.concat();
-				var newPhoneUserData = shopPhoneUsersStatisticsData.concat();
-				if (!event.data.name || event.data.name !== 'selected') { // 选中一个门店
-					if (event.seriesName === '手机会员') {
-						$('#currentShopName').text(shopPhoneUsersStatisticsData[event.dataIndex].name);
-						newPhoneUserData[event.dataIndex] = {
-							value : newPhoneUserData[event.dataIndex].value,
-							name : 'selected',
-							label : {
-								normal : {
-									show : true,
-									position : 'top',
-									textStyle : {
-										color : '#E74C3C'
-									}
-								},
-								emphasis : {
-									show : true,
-									position : 'top',
-									textStyle : {
-										color : '#E74C3C'
-									}
-								}
-							},
-							itemStyle : {
-								normal : {
-									color : '#E74C3C'
-								},
-								emphasis : {
-									color : '#E74C3C'
-								}
+		}
+	})
+	// 门店会员统计数据
+	$.ajax({
+		url: ctx + 'StoreCustomerAction/getStoreCustomerTotalListForStore.do?parentStoreId=' + storeId,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				shopUsersStatisticsChart.hideLoading();
+				var seriesData = [
+					{
+						data: response.data.sort(function (a, b) {
+								return a.customerTotal - b.customerTotal;
+						}).map(function(item){
+							return {
+								value: item.customerTotal,
+								id: item.storeId
 							}
-						}
-					} else if (event.seriesName === '全部会员') {
-						$('#currentShopName').text(shopUsersStatisticsData[event.dataIndex].name);
-						newUserData[event.dataIndex] = {
-							value : newUserData[event.dataIndex].value,
-							name : 'selected',
-							label : {
-								normal : {
-									show : true,
-									position : 'top',
-									textStyle : {
-										color : '#E74C3C'
-									}
-								},
-								emphasis : {
-									show : true,
-									position : 'top',
-									textStyle : {
-										color : '#E74C3C'
-									}
-								}
-							},
-							itemStyle : {
-								normal : {
-									color : '#E74C3C'
-								},
-								emphasis : {
-									color : '#E74C3C'
-								}
-							}
-						}
-					}
-				}else {
-					$('#currentShopName').text('全部门店');
-				}
-				shopUsersStatisticsChart.setOption({
-					series : [ {
-						data : newUserData
+						})
 					}, {
-						data : newPhoneUserData
-					} ]
-				});
-				resetUserChartData();
-			}
-		});
-		$('#showAllUserData').click(function () {
-			shopUsersStatisticsChart.setOption({
-				series : [ {
-					data : shopUsersStatisticsData
-				}, {
-					data : shopPhoneUsersStatisticsData
-				} ]
-			});
-			$('#currentShopName').text('全部门店');
-			resetUserChartData();
-		})
-		// 设置会员漏斗数据-----------------------------------
-		userFunnelChart.hideLoading();
-		userFunnelChart.setOption({
-			legend : {
-				data : [ '全部会员', '绑定手机', '已消费' ]
-			},
-			series : [ {
-				data : [ {
-					value : 100,
-					name : '全部会员'
-				}, {
-					value : 80,
-					name : '绑定手机'
-				}, {
-					value : 70,
-					name : '已消费'
-				}, ]
-			} ]
-		});
-		$('.custom-user-percent').show().find('h4').text('70%');
-		// 设置新增会员数据-----------------------------------
-		var timesNewUserData = [ {
-			value : 100,
-			date : '2017.01.01'
-		}, {
-			value : 150,
-			date : '2017.01.02'
-		}, {
-			value : 78,
-			date : '2017.01.03'
-		}, {
-			value : 50,
-			date : '2017.01.04'
-		}, {
-			value : 122,
-			date : '2017.01.05'
-		}, {
-			value : 90,
-			date : '2017.01.06'
-		}, {
-			value : 200,
-			date : '2017.01.07'
-		} ];
-		timesNewUserChart.hideLoading();
-		timesNewUserChart.setOption({
-			xAxis : {
-				data : timesNewUserData.map(function(item) {
-					return item.date;
-				})
-			},
-			series : [ {
-				name : '新增会员',
-				type : 'line',
-				areaStyle : {
-					normal : {
-						opacity : 0.4
+						data: response.data.sort(function (a, b) {
+								return a.phoneCustomerTotal - b.phoneCustomerTotal;
+						}).map(function(item){
+							return {
+								value: item.phoneCustomerTotal,
+								id: item.storeId
+							}
+						})
 					}
-				},
-				data : timesNewUserData
-			} ]
-		});
-	}, 1000)
+				];
+				var xAxisData = [{
+					data: response.data.sort(function (a, b) {
+							return a.customerTotal - b.customerTotal;
+					}).map(function(item){
+						return item.storeShortName
+					})
+				},{
+					data: response.data.sort(function (a, b) {
+							return a.phoneCustomerTotal - b.phoneCustomerTotal;
+					}).map(function(item){
+						return item.storeShortName
+					})
+				}]
+				// 固定显示25个门店
+				var userZoomPercent = 25 / response.data.length;
+				shopUsersStatisticsChart.setOption({
+					dataZoom : [ {
+						type : 'inside',
+						start : 100 * (1 - userZoomPercent),
+						end : 100
+					}, {
+						type : 'slider',
+						show : true,
+						height : 20,
+						bottom : 10,
+						start : 100 * (1 - userZoomPercent),
+						end : 100
+					}, {
+						type : 'slider',
+						show : true,
+						yAxisIndex : 0,
+						right : 0,
+						width : 20,
+						start : 0,
+						end : 100
+					} ],
+					xAxis : xAxisData[0],
+					series : seriesData
+				});
+				shopUsersStatisticsChart.on('legendselectchanged', function(event) { // 切换会员类型时切换X轴
+					if (event.name === '手机会员') {
+						shopUsersStatisticsChart.setOption({
+							xAxis : xAxisData[1]
+						});
+					} else if (event.name === '全部会员') {
+						shopUsersStatisticsChart.setOption({
+							xAxis : xAxisData[0]
+						});
+					}
+				});
+				shopUsersStatisticsChart.on('click', function(event) { // 选中一个门店-------------------------------------
+					if (event.componentType === 'series') {
+						var newUserData = seriesData[0].data.concat();
+						var newPhoneUserData = seriesData[1].data.concat();
+						if (!event.data.name || event.data.name !== 'selected') { // 选中一个门店
+							if (event.seriesName === '手机会员') {
+								$('#currentShopName').text(xAxisData[1].data[event.dataIndex]);
+								curStoreId = newPhoneUserData[event.dataIndex].id;
+								showTotalShopData = false;
+								resetUserChartData();
+								newPhoneUserData[event.dataIndex] = {
+									value : newPhoneUserData[event.dataIndex].value,
+									id: newPhoneUserData[event.dataIndex].id,
+									name : 'selected',
+									label : {
+										normal : {
+											show : true,
+											position : 'top',
+											textStyle : {
+												color : '#E74C3C'
+											}
+										},
+										emphasis : {
+											show : true,
+											position : 'top',
+											textStyle : {
+												color : '#E74C3C'
+											}
+										}
+									},
+									itemStyle : {
+										normal : {
+											color : '#E74C3C'
+										},
+										emphasis : {
+											color : '#E74C3C'
+										}
+									}
+								}
+							} else if (event.seriesName === '全部会员') {
+								$('#currentShopName').text(xAxisData[0].data[event.dataIndex]);
+								curStoreId = newUserData[event.dataIndex].id;
+								showTotalShopData = false;
+								resetUserChartData();
+								newUserData[event.dataIndex] = {
+									value : newUserData[event.dataIndex].value,
+									id: newUserData[event.dataIndex].id,
+									name : 'selected',
+									label : {
+										normal : {
+											show : true,
+											position : 'top',
+											textStyle : {
+												color : '#E74C3C'
+											}
+										},
+										emphasis : {
+											show : true,
+											position : 'top',
+											textStyle : {
+												color : '#E74C3C'
+											}
+										}
+									},
+									itemStyle : {
+										normal : {
+											color : '#E74C3C'
+										},
+										emphasis : {
+											color : '#E74C3C'
+										}
+									}
+								}
+							}
+						}else {
+							$('#currentShopName').text('全部门店');
+							curStoreId = storeId;
+							showTotalShopData = true;
+							resetUserChartData();
+						}
+						shopUsersStatisticsChart.setOption({
+							series : [ {
+								data : newUserData
+							}, {
+								data : newPhoneUserData
+							} ]
+						});
+					}
+				});
+				$('#showAllUserData').click(function () {
+					shopUsersStatisticsChart.setOption({
+						series : [ {
+							data : seriesData[0].data
+						}, {
+							data : seriesData[1].data
+						} ]
+					});
+					$('#currentShopName').text('全部门店');
+					curStoreId = storeId;
+					showTotalShopData = true;
+					resetUserChartData();
+				})
+			}
+		}
+	})
+	// 门店会员数据分析
+	resetUserChartData();
+
 	// 门店新增会员切换日期
 	$('#userChartRange').daterangepicker(dateRangeOption);
-	$('#userChartRange').on(
-			'apply.daterangepicker',
-			function(ev, picker) {
-				$('#userChartRange span').html(
-						picker.startDate.format('YYYY.MM.DD') + ' - '
-								+ picker.endDate.format('YYYY.MM.DD'));
-				$('.chart-tabs span').removeClass('active');
-				resetUserChartData();
-			});
+	$('#userChartRange').on('apply.daterangepicker', function(ev, picker) {
+		$('#userChartRange span').html(picker.startDate.format('YYYY.MM.DD') + ' - ' + picker.endDate.format('YYYY.MM.DD'));
+		$('.chart-tabs span').removeClass('active');
+		startDateFormat = picker.startDate.format('YYYY.MM.DD');
+		endDateFormat = picker.endDate.format('YYYY.MM.DD');
+		resetUserChartData();
+	});
 	$('.chart-tabs span').on('click', function() {
 		$('#userChartRange span').html('点击选择日期');
+		startDateFormat = moment().subtract(parseInt($(this).attr('data-value')) - 1, 'days').format('YYYY-MM-DD');
+		endDateFormat = moment().format('YYYY-MM-DD');
 		resetUserChartData();
-	})
-})
-function resetUserChartData() {
-	timesNewUserChart.showLoading('default', loadingOption);
-	setTimeout(function() {
-		timesNewUserChart.hideLoading();
-		var timesNewUserData = [];
-		for ( var i = 0; i < parseInt(100 * Math.random()); i++) {
-			timesNewUserData.push({
-				value : parseInt(500 * Math.random()),
-				date : '2017.01.' + i
-			})
+	});
+
+	function resetUserChartData() {
+		var getStoreCustomerTotalForDateUrl = ctx + 'StoreCustomerAction/getStoreCustomerTotalForDate.do?storeId=' + curStoreId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+		var getStoreCustomerTotalByStoreIdUrl = ctx + 'StoreCustomerAction/getStoreCustomerTotalByStoreId.do?storeId=' + curStoreId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+		if (showTotalShopData) {
+			getStoreCustomerTotalForDateUrl = ctx + 'StoreCustomerAction/getParentStoreCustomerTotalForDate.do?parentStoreId=' + curStoreId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+			getStoreCustomerTotalByStoreIdUrl = ctx + 'StoreCustomerAction/getStoreCustomerTotalByPid.do?parentStoreId=' + curStoreId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
 		}
-		timesNewUserChart.setOption({
-			xAxis : {
-				data : timesNewUserData.map(function(item) {
-					return item.date;
-				})
-			},
-			series : [{
-				data : timesNewUserData
-			}]
-		});
-	}, 1000)
-}
+		timesNewUserChart.showLoading('default', loadingOption);
+		$.ajax({ // 对应门店下七天新增会员
+			url: getStoreCustomerTotalForDateUrl,
+			type: 'post',
+			success: function (response) {
+				if (response.code === 0) {
+					timesNewUserChart.hideLoading();
+					timesNewUserChart.setOption({
+						xAxis : {
+							data : response.data.map(function(item) {
+								return item.dateTime;
+							})
+						},
+						series : [ {
+							name : '新增会员',
+							type : 'line',
+							areaStyle : {
+								normal : {
+									opacity : 0.4
+								}
+							},
+							data : response.data.map(function(item) {
+								return item.customerTotal;
+							})
+						} ]
+					});
+				}
+			}
+		})
+		userFunnelChart.showLoading('default', loadingOption);
+		$.ajax({ // 设置会员漏斗数据
+			url: getStoreCustomerTotalByStoreIdUrl,
+			type: 'post',
+			success: function (response) {
+				if (response.code === 0) {
+					userFunnelChart.hideLoading();
+					userFunnelChart.setOption({
+						legend : {
+							data : [ '全部会员', '绑定手机', '已消费' ]
+						},
+						series : [ {
+							data : [ {
+								value : 100,
+								name : '全部会员'
+							}, {
+								value : (response.data.phoneCustomerTotal/response.data.customerTotal*100).toFixed(2),
+								name : '绑定手机'
+							}, {
+								value : (response.data.paidCustomerTotal/response.data.customerTotal*100).toFixed(2),
+								name : '已消费'
+							}, ]
+						} ]
+					});
+					$('.custom-user-percent').show().find('h4').text((response.data.paidCustomerTotal/response.data.phoneCustomerTotal*100).toFixed(2) + '%');
+				}
+			}
+		})
+	}
+})
