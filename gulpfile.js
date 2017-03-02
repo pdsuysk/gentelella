@@ -50,6 +50,7 @@ gulp.task('browser-sync', function() {
           baseDir: './',
           middleware: [apiProxy]
         },
+        ghostMode: false, // 关闭镜像功能
         port: 9006,
         startPath: './bigaka/html/index.html'
     });

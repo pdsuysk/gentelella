@@ -11,9 +11,17 @@
     <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="../../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="../../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="../../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
     <!-- Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
   </head>
 
@@ -45,17 +53,17 @@
               <div class="menu_section">
                 <ul class="nav side-menu">
                   <li>
-                  	<a href="index.html"><i class="fa fa-home"></i>概况</a>
+                    <a href="index.html"><i class="fa fa-home"></i>概况</a>
                   </li>
                   <li>
-                  	<a><i class="fa fa-user"></i>会员<span class="fa fa-chevron-down"></span></a>
+                    <a><i class="fa fa-user"></i>会员<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="user-statistics.html">会员统计</a></li>
                       <li><a href="user-subdivision.html">会员细分</a></li>
                     </ul>
                   </li>
                   <li>
-                  	<a><i class="fa fa-yen"></i>销售<span class="fa fa-chevron-down"></span></a>
+                    <a><i class="fa fa-yen"></i>销售<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="sales-statistics.html">总量分析</a></li>
                       <li><a href="sales-shop.html">门店分析</a></li>
@@ -64,7 +72,7 @@
                     </ul>
                   </li>
                   <li>
-                  	<a><i class="fa fa-tag"></i>营销<span class="fa fa-chevron-down"></span></a>
+                    <a><i class="fa fa-tag"></i>营销<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="market-coupon.html">优惠券</a></li>
                     </ul>
@@ -104,7 +112,7 @@
                     <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                   </ul>
                 </li>
-              	<a class="refresh-data">刷新</a>
+                <a class="refresh-data">刷新</a>
                 <span class="data-refresh-time">数据刷新：2016年11月24日 11:30:20</span>
               </ul>
             </nav>
@@ -114,14 +122,99 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-        	
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="chart-panel">
+                <div class="chart-title">
+                  <div class="chart-header ">
+                    <div class="clearfix">
+                      <span class="chart-header-text">品类销售占比</span>
+                      <span class="tips">点击选择导航/分组，展示对应信息</span>
+                      <div class="date-range-selecter pull-right">
+                        <span>自定义：</span>
+                        <div id="everyDateRange" class="pull-right">
+                          <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                          <span>点击选择日期</span>
+                          <b class="caret"></b>
+                        </div>
+                      </div>
+                      <div class="chart-tabs pull-right" id="everyDateChange">
+                        <span class="active" data-value="7">7天</span>
+                        <span data-value="30">30天</span>
+                        <span data-value="90">90天</span>
+                      </div>
+                    </div>
+
+                    <div class="category-style clearfix">
+                      <div class="pull-right">
+                        <span>按</span><span class='active mode' data-mode="0">商品导航</span>
+                        <span class="mode" data-mode="1">活动分组</span>统计
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="chart-content">
+                  <div class="row">
+                  <div class="col-xs-8">
+                      <div id="categoryRectangleStatistics" class="large-chart"></div>
+                    </div>
+                    <div class="col-xs-4">
+                      <div id="categoryTop10Statistics" class="large-chart"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="table-check">
+                  <input type="radio" class="" name="guide-check" checked value="0"/>
+                  <label>一级导航</label>
+                  <input type="radio" class="" name="guide-check" value="1"/>
+                  <label>二级导航</label>
+                </div>
+                <div class="table-panel">
+
+                  <table id="productTable" class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>导航名称/活动分组</th>
+                        <th>销量</th>
+                        <th>销售额</th>
+                        <th>销量累计占比</th>
+                        <th>销售额累计占比</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="chart-title">
+                  <span id="activeGoodsName">XX导航/分组</span>-销售趋势
+                  <div class="chart-header clearfix pull-right">
+                    <span class="chart-header-text">按</span>
+                    <div class="chart-tabs pull-left" id="goodTrendType" style="margin: 0 15px;">
+                      <span class="active" data-value="0">日</span>
+                      <span data-value="1">周</span>
+                      <span data-value="2">月</span>
+                    </div>
+                    <span class="chart-header-text">统计</span>
+                  </div>
+                </div>
+                <div class="chart-content">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <div id="goodsTrendStatistics" class="large-chart"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /page content -->
 
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-          	Retail Big Data Engine Powered By <a href="http://www.bigaka.com" target="_blank">Bigaka</a>
+            Retail Big Data Engine Powered By <a href="http://www.bigaka.com" target="_blank">Bigaka</a>
           </div>
           <div class="clearfix"></div>
         </footer>
@@ -135,6 +228,30 @@
     <script src="../../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+    <!-- Echarts -->
+    <script src="../js/echarts/echarts.js" type="text/javascript" charset="utf-8"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../../vendors/moment/min/moment.min.js"></script>
+    <script src="../../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Datatables -->
+    <script src="../../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="../../vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="../../vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="../../vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="../../vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="../../vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="../../vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>
+    <script src="../../vendors/jszip/dist/jszip.min.js"></script>
+    <script src="../../vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="../../vendors/pdfmake/build/vfs_fonts.js"></script>
+
+    <script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/sales-category.js" type="text/javascript" charset="utf-8"></script>
 
   </body>
 </html>

@@ -171,7 +171,7 @@ body .container.body .right_col {
 	display: inline-block;
 	line-height: 31px;
 }
-.chart-tabs>span {
+.chart-tabs>span,.category-style span {
   display: inline-block;
   padding: 0px 15px;
   border-right: 1px solid #ddd;
@@ -180,15 +180,17 @@ body .container.body .right_col {
   margin: 7px 0;
   cursor: pointer;
 }
-.chart-tabs>span.active {
+.chart-tabs>span.active,.category-style span.active{
 	color: #1ABB9C;
 }
-.chart-tabs>span:last-child {
+.chart-tabs>span:last-child ,.category-style span:last-child,.category-style span:first-child{
 	border-right: 0;
 }
-
+.category-style span:first-child{
+    padding: 0px;
+}
 .table-search {
-	
+
 }
 .table-search .reset-search {
 	float: right;

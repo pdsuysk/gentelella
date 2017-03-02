@@ -193,9 +193,10 @@ $(function() {
 			position: 'top'
 		},
 		grid : { // 网格
-			left : 30,
-			right : 30,
-			bottom : 30
+			left : 0,
+			right : 40,
+			bottom : 10,
+			containLabel: true
 		},
 		xAxis : {
 			boundaryGap : false,
@@ -209,7 +210,7 @@ $(function() {
 					color: '#888888'
 				}
 			},
-			data : ['周一','周二','周三','周四','周五','周六','周日']
+			data : []
 		},
 		yAxis : {
 			splitLine: {
@@ -301,6 +302,61 @@ $(function() {
 	var nowDateFormat = moment().format('YYYY-MM-DD'); // 今天
 	var last7DayDateFormat = moment().subtract(6, 'days').format('YYYY-MM-DD'); // 七天前
 
+	// 七天优惠券核销数量
+	$.ajax({
+		url: ctx + 'CouponDateAction/getByCouponSumTotal.do?storeId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				$('#7daysTotalCouponNum').text(response.data.appliedAmountTotal)
+			}
+		}
+	})
+	// 七天优惠券核销数据
+	$.ajax({
+		url: ctx + 'CouponDateAction/getCouponTotalGroupByDate.do?storeId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				daysNewCouponChart.hideLoading();
+				daysNewCouponChart.setOption({
+					series : [{
+						data : response.data.map(function(item){
+							return item.appliedAmountTotal
+						})
+					}]
+				});
+			}
+		}
+	})
+	// 七天新增绑定手机会员
+	$.ajax({
+		url: ctx + 'StoreCustomerAction/getStoreCustomerTotalByPid.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				$('#7daysTotalPhoneUser').text(response.data.phoneCustomerTotal)
+			}
+		}
+	})
+	// 七天绑定手机会员数据
+	// $.ajax({
+	// 	url: ctx + 'StoreCustomerAction/getStoreCustomerTotalForDate.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+	// 	type: 'post',
+	// 	success: function (response) {
+	// 		debugger
+	// 		if (response.code === 0) {
+	// 			daysNewUserChart.hideLoading();
+	// 			daysNewUserChart.setOption({
+	// 				series : [{
+	// 					data : response.data.map(function(item){
+	// 						return item.phoneCustomerTotal
+	// 					})
+	// 				}]
+	// 			});
+	// 		}
+	// 	}
+	// })
 	// 7天总订单数和销售额
 	$.ajax({
 		url: ctx + 'OrderStoreDateAction/getOSDTotal.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
@@ -331,7 +387,29 @@ $(function() {
 				daysNewMoneyChart.setOption({
 					series : [{
 						data : response.data.map(function(item){
-							return item.orderPaidTotal
+							return (item.orderPaidTotal/100).toFixed(2)
+						})
+					}]
+				});
+			}
+		}
+	})
+	// 7天新增手机会员top5
+	$.ajax({
+		url: ctx + 'StoreCustomerAction/getStoreCustomerTotalListForStore.do?parentStoreId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat + '&orderBy=phoneCustomerTotal&limitSize=5',
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				top5ShopUserChart.hideLoading();
+				top5ShopUserChart.setOption({
+					yAxis: {
+						data: response.data.map(function(item){
+							return item.storeShortName
+						})
+					},
+					series : [{
+						data : response.data.map(function(item){
+							return item.phoneCustomerTotal
 						})
 					}]
 				});
@@ -382,133 +460,138 @@ $(function() {
 			}
 		}
 	})
+	// 优惠券营销数据top5
+	$.ajax({
+		url: ctx + 'CouponDateAction/getCouponTotalGroupByCouponId.do?storeId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat + '&orderBy=collectNumberTotal&limitSize=5',
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				couponRankChart.hideLoading();
+				couponRankChart.setOption({
+					series : [{
+						data : response.data.map(function(item){
+							return {
+								value: item.collectNumberTotal,
+								name: item.title
+							}
+						})
+					},{
+					}]
+				})
+			}
+		}
+	})
+	$.ajax({
+		url: ctx + 'CouponDateAction/getCouponTotalGroupByCouponId.do?storeId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat + '&orderBy=appliedAmountTotal&limitSize=5',
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				couponRankChart.hideLoading();
+				couponRankChart.setOption({
+					series : [{
+					},{
+						data : response.data.map(function(item){
+							return {
+								value: item.appliedAmountTotal,
+								name: item.title
+							}
+						})
+					}]
+				})
+			}
+		}
+	})
+	// 7天营销数据概览
+	$.ajax({
+		url: ctx + 'CouponDateAction/getCouponTotalGroupByDate.do?storeId=' + storeId + '&startDate=' + last7DayDateFormat + '&endDate=' + nowDateFormat,
+		type: 'post',
+		success: function (response) {
+			if (response.code === 0) {
+				couponStatisticsChart.hideLoading();
+				couponStatisticsChart.setOption({
+					legend : { // 图例
+						data:[{
+							name: '领取量'
+						},{
+							name: '核销量'
+						}]
+					},
+					xAxis : {
+						data : response.data.map(function(item){
+							return item.dataTime
+						})
+					},
+					series : [{
+				        name: '领取量',
+				        type: 'line',
+				        smooth: true,
+				        smoothMonotone: 'x',
+				        areaStyle: {
+				        	normal: {
+				        		opacity: 0.3
+				        	}
+				        },
+				        data: response.data.map(function(item){
+									return item.collectNumberTotal
+								})
+				    },
+				    {
+				        name: '核销量',
+				        type: 'line',
+				        smooth: true,
+				        smoothMonotone: 'x',
+				        areaStyle: {
+				        	normal: {
+				        		opacity: 0.3
+				        	}
+				        },
+				        data: response.data.map(function(item){
+									return item.appliedAmountTotal
+								})
+				    }]
+				});
+			}
+		}
+	})
 
 	setTimeout(function(){ // 填充数据
-		var daysNewUserDatas = [10,20,5,20,5,36,10];
-		var daysNewOrderDatas = [10,20,5,20,5,36,10];
-		var daysNewMoneyDatas = [10,20,5,20,5,36,10];
-		var daysNewCouponDatas = [10,20,5,20,5,36,10];
+		// var couponStatisticsGetDatas = [10,20,5,20,5,36,10];
+		// var couponStatisticsUseDatas = [20,10,36,5,10,20,36];
 
-		var top5ShopUserDatas = [{
-			value: 10000,
-			name: '人民广场店'
-		},{
-			value: 8452,
-			name: '徐家汇店'
-		},{
-			value: 7158,
-			name: '马路牙子店'
-		},{
-			value: 5848,
-			name: '南京东路店'
-		},{
-			value: 1000,
-			name: '中山公园店'
-		}];
 
-		var couponStatisticsGetDatas = [10,20,5,20,5,36,10];
-		var couponStatisticsUseDatas = [20,10,36,5,10,20,36];
-
-		var couponRankGetDatas = [{
-			value: 500,
-			name: '人民广场店'
-		},{
-			value: 451,
-			name: '徐家汇店'
-		},{
-			value: 345,
-			name: '马路牙子店'
-		},{
-			value: 344,
-			name: '南京东路店'
-		},{
-			value: 122,
-			name: '中山公园店'
-		}];
-		var couponRankUseDatas = [{
-			value: 700,
-			name: '人民广场店'
-		},{
-			value: 548,
-			name: '徐家汇店'
-		},{
-			value: 385,
-			name: '马路牙子店'
-		},{
-			value: 245,
-			name: '南京东路店'
-		},{
-			value: 88,
-			name: '中山公园店'
-		}];
-		daysNewUserChart.hideLoading();
-		daysNewUserChart.setOption({
-			series : [{
-				data : daysNewUserDatas
-			}]
-		});
-
-		daysNewCouponChart.hideLoading();
-		daysNewCouponChart.setOption({
-			series : [{
-				data : daysNewCouponDatas
-			}]
-		});
-
-		top5ShopUserChart.hideLoading();
-		top5ShopUserChart.setOption({
-			yAxis: {
-				data: top5ShopUserDatas.map(function(item){
-					return item.name
-				})
-			},
-			series : [{
-				data : top5ShopUserDatas
-			}]
-		});
-
-		couponStatisticsChart.hideLoading();
-		couponStatisticsChart.setOption({
-			legend : { // 图例
-				data:[{
-					name: '领取量'
-				},{
-					name: '核销量'
-				}]
-			},
-			series : [{
-		        name: '领取量',
-		        type: 'line',
-		        smooth: true,
-		        smoothMonotone: 'x',
-		        areaStyle: {
-		        	normal: {
-		        		opacity: 0.3
-		        	}
-		        },
-		        data: couponStatisticsGetDatas
-		    },
-		    {
-		        name: '核销量',
-		        type: 'line',
-		        smooth: true,
-		        smoothMonotone: 'x',
-		        areaStyle: {
-		        	normal: {
-		        		opacity: 0.3
-		        	}
-		        },
-		        data: couponStatisticsUseDatas
-		    }]
-		});
-		couponRankChart.hideLoading();
-		couponRankChart.setOption({
-			series : [{
-				data : couponRankGetDatas
-		    },
-		    {
-				data : couponRankUseDatas
-		    }]
-		})
+		// couponStatisticsChart.hideLoading();
+		// couponStatisticsChart.setOption({
+		// 	legend : { // 图例
+		// 		data:[{
+		// 			name: '领取量'
+		// 		},{
+		// 			name: '核销量'
+		// 		}]
+		// 	},
+		// 	series : [{
+		//         name: '领取量',
+		//         type: 'line',
+		//         smooth: true,
+		//         smoothMonotone: 'x',
+		//         areaStyle: {
+		//         	normal: {
+		//         		opacity: 0.3
+		//         	}
+		//         },
+		//         data: couponStatisticsGetDatas
+		//     },
+		//     {
+		//         name: '核销量',
+		//         type: 'line',
+		//         smooth: true,
+		//         smoothMonotone: 'x',
+		//         areaStyle: {
+		//         	normal: {
+		//         		opacity: 0.3
+		//         	}
+		//         },
+		//         data: couponStatisticsUseDatas
+		//     }]
+		// });
 	}, 1000)
 })
