@@ -365,7 +365,7 @@ $(function() {
     // 单个导航/分类销售趋势chart初始化
     window.goodsTrendStatisticsChart = echarts.init(document.getElementById('goodsTrendStatistics'));
     pageEcharts.push(goodsTrendStatisticsChart);
-    goodsTrendStatisticsChart.showLoading('default', loadingOption);
+    // goodsTrendStatisticsChart.showLoading('default', loadingOption);
     var goodsTrendStatisticsColor = ['#1ABB9C', '#7bd9a5', '#3fb1e3'];
     goodsTrendStatisticsChart.setOption({
         color: goodsTrendStatisticsColor,
