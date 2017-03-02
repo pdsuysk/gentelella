@@ -63,7 +63,7 @@ $(function() {
   // 单个优惠券数据chart初始化
   window.couponTrendStatisticsChart = echarts.init(document.getElementById('couponTrendStatistics'));
   pageEcharts.push(couponTrendStatisticsChart);
-  couponTrendStatisticsChart.showLoading('default', loadingOption);
+  // couponTrendStatisticsChart.showLoading('default', loadingOption);
   couponTrendStatisticsChart.setOption({
     title: {
       show: false
@@ -92,6 +92,11 @@ $(function() {
           type : 'category',
           boundaryGap : false,
           axisLine: {onZero: true},
+					axisLine: {
+						lineStyle: {
+							color: '#888888'
+						}
+					},
           data: []
       },
       {
@@ -100,19 +105,44 @@ $(function() {
           boundaryGap : false,
           axisLine: {onZero: true},
           data: [],
+					axisLine: {
+						lineStyle: {
+							color: '#888888'
+						}
+					},
           position: 'top'
       }
     ],
     yAxis : [
       {
           name : '领取量(张)',
-          type : 'value'
+          type : 'value',
+					axisLine: {
+						lineStyle: {
+							color: '#888888'
+						}
+					},
+					splitLine : {
+						lineStyle : {
+							type : 'dashed'
+						}
+					},
       },
       {
           gridIndex: 1,
           name : '核销量(张)',
           type : 'value',
-          inverse: true
+          inverse: true,
+					axisLine: {
+						lineStyle: {
+							color: '#888888'
+						}
+					},
+					splitLine : {
+						lineStyle : {
+							type : 'dashed'
+						}
+					},
       }
     ],
     series : [
