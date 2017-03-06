@@ -274,6 +274,7 @@ $(function() {
 		$('#couponTable tbody tr.success').removeClass('success');
 		$(this).addClass('success');
 		$('#activeCouponName').text($(this).find('.coupon-name').attr('data-name'));
+		debugger
 		getCouponTrend($(this).find('.coupon-name').attr('data-id'));
 	})
 
@@ -285,17 +286,17 @@ $(function() {
 		if(!endDateFormat) {
 			endDateFormat = curEndDate
 		}
-    $.ajax({
-			url: ctx + 'CouponDateAction/getCouponTotalByCouponId.do?couponId=' + couponId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
-			type: 'post',
-			success: function(response) {
-				if(response.code === 0) {
-          $('#oneCouponQuantityTotal').text(response.data.quantityTotal);
-          $('#oneCouponCollectNumberTotal').text(response.data.collectNumberTotal);
-          $('#oneCouponAppliedAmountTotal').text(response.data.appliedAmountTotal);
-        }
-      }
-    });
+	    $.ajax({
+				url: ctx + 'CouponDateAction/getCouponTotalByCouponId.do?couponId=' + couponId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
+				type: 'post',
+				success: function(response) {
+					if(response.code === 0) {
+	          $('#oneCouponQuantityTotal').text(response.data.quantityTotal);
+	          $('#oneCouponCollectNumberTotal').text(response.data.collectNumberTotal);
+	          $('#oneCouponAppliedAmountTotal').text(response.data.appliedAmountTotal);
+	        }
+	      }
+	    });
 		couponTrendStatisticsChart.showLoading('default', loadingOption);
 		$.ajax({
 			url: ctx + 'CouponDateAction/getListByCouponIdAndDate.do?couponId=' + couponId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
@@ -304,18 +305,22 @@ $(function() {
 				if(response.code === 0) {
 					couponTrendStatisticsChart.hideLoading();
 					couponTrendStatisticsChart.setOption({
-						xAxis: {
+						xAxis: [{
 							data: response.data.map(function(item) {
-								return item.date
+								return moment(item.date).format('YYYY-MM-DD');
 							})
-						},
+						},{
+							data: response.data.map(function(item) {
+								return moment(item.date).format('YYYY-MM-DD');
+							})
+						}],
 						series: [{
 							data: response.data.map(function(item) {
-  							return item.collectNumberTotal
+  							return item.collectNumber
   						})
 						}, {
 							data: response.data.map(function(item) {
-  							return item.appliedAmountTotal
+  							return item.appliedAmount
   						})
 						}]
 					});

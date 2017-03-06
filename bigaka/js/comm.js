@@ -1,4 +1,4 @@
-var ctx = '../../wx_big_data/';
+var ctx = '../../wx-big-data/';
 
 var getUrlParam = function (param) {
   var query = window.location.search.substr(1)

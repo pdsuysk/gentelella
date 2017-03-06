@@ -4,9 +4,11 @@ function resetCharts() {
     })
 }
 var top10OrderBy = 'productSaleNumber'; // productSaleNumber:销量；productSaleAmount:销售金额；
-var curStartDate;
-var curEndDate;
-var mode=0;
+var curStartDate; // 当前选择的时间段
+var curEndDate; // 当前选择的时间段
+var sortMode = 'number'; // number销量；amount销售额
+var productMode = '0'; // 0导航；1分组
+var curProductId = ''; // 选中产品id
 $(function() {
     window.pageEcharts = []; // 记录页面上所有的echart，方便统一resize
     $('#menu_toggle').on('click', function() {
@@ -20,66 +22,31 @@ $(function() {
     pageEcharts.push(categoryRectangleStatisticsChart);
     categoryRectangleStatisticsChart.showLoading('default', loadingOption);
     categoryRectangleStatisticsChart.setOption({
-        title: {
-            show: false,
+    	title: {
+            show: false
         },
-        color:['#1ABB9C', '#7bd9a5', '#3fb1e3'],
-        tooltip: {},
-        legend: {
-            show: true,
-            data: ['销量', '销售额'],
-            selected: {
-                '销量': true,
-                '销售额': false
-            },
-            itemGap: 5,
-            selectedMode: 'single',
+        grid: { // 网格
+            left: 0,
             top: 0,
-            left:0
+            right: 0,
+            bottom: 0,
+            containLabel: true
         },
+        tooltip: {},
         series: [{
             name: '销量',
             type: 'treemap',
-            visibleMin: 300,
-            leafDepth: 2,
-            levels: [
-                {
-                    itemStyle: {
-                        normal: {
-                            borderColor: '#555',
-                            borderWidth: 4,
-                            gapWidth: 4
-                        }
-                    }
-                },
-                {
-                    colorSaturation: [0.3, 0.6],
-                    itemStyle: {
-                        normal: {
-                            borderColorSaturation: 0.7,
-                            gapWidth: 2,
-                            borderWidth: 2
-                        }
-                    }
-                },
-                {
-                    colorSaturation: [0.3, 0.5],
-                    itemStyle: {
-                        normal: {
-                            borderColorSaturation: 0.6,
-                            gapWidth: 1
-                        }
-                    }
-                },
-                {
-                    colorSaturation: [0.3, 0.5]
-                }
-            ]
-        },{
-            name: '销售额',
-            type: 'treemap',
-            visibleMin: 300,
-            leafDepth: 2,
+            left: 0,
+            top: 30,
+            width: '100%',
+            height: 660,
+            roam: false,
+            breadcrumb: {
+            	show: true,
+            	left: 0,
+            	top: 0
+            },
+            leafDepth: 1,
             levels: [
                 {
                     itemStyle: {
@@ -115,24 +82,17 @@ $(function() {
             ]
         }]
     })
-    // 初始化商品top10chart
+    // 初始化导航/分组top10chart
     window.categoryTop10StatisticsChart = echarts.init(document.getElementById('categoryTop10Statistics'));
     pageEcharts.push(categoryTop10StatisticsChart);
     categoryTop10StatisticsChart.showLoading('default', loadingOption);
-    var categoryTop10StatisticsColor = ['#1ABB9C', '#7bd9a5', '#3fb1e3'];
     categoryTop10StatisticsChart.setOption({
-        color: categoryTop10StatisticsColor,
+        color: ['#1ABB9C', '#7bd9a5', '#3fb1e3'],
         title: {
             show: false
         },
         legend: {
-            data: ['销量', '销售额'],
-            selected: {
-                '销量': true,
-                '销售额': false
-            },
-            selectedMode: 'single',
-            right: 10
+            show: false
         },
         tooltip: {
             trigger: 'axis',
@@ -142,9 +102,9 @@ $(function() {
         },
         grid: { // 网格
             left: 25,
-            top: 40,
+            top: 30,
             right: 30,
-            bottom: 20,
+            bottom: 10,
             containLabel: true
         },
         xAxis: {
@@ -164,14 +124,9 @@ $(function() {
             }
         },
         yAxis: {
-            name: '',
-            nameLocation: 'start',
-            nameTextStyle: {
-                fontSize: 16,
-                color: '#73879C'
-            },
             type: 'category',
             inverse: true,
+            z: 2,
             axisLabel: {
                 inside: true,
                 textStyle: {
@@ -181,7 +136,6 @@ $(function() {
             axisTick: {
                 show: false
             },
-            z: 2,
             splitLine: {
                 lineStyle: {
                     type: 'dashed'
@@ -198,24 +152,33 @@ $(function() {
             name: '销量',
             type: 'bar',
             legendHoverLink: false
-        }, {
-            name: '销售额',
-            type: 'bar',
-            legendHoverLink: false
         }]
     });
     // 处理树图数据
     function convertTreeData(treeData, valueKey){
-      return treeData.map(function(guide){
-        var tempData = {
-          name: guide.guideName,
-          value: valueKey === 'guideSaleAmount' ? (guide.guideSaleAmount/100).toFixed(2) :guide[valueKey],
-        }
-        if (typeof(guide.guideData) === 'object' && guide.guideData.length > 0) {
-          tempData.children = convertTreeData(guide.guideData, valueKey);
-        }
-        return tempData;
-      });
+    	return treeData.map(function(guide){
+    		if(productMode === '0') {
+    			var tempData = {
+					name: guide.guideName
+    			}
+    			if (typeof(guide.guideData) === 'object' && guide.guideData.length > 0) {
+    				tempData.children = convertTreeData(guide.guideData, valueKey);
+    			}else {
+    				tempData.value = valueKey === 'guideSaleAmount' ? parseFloat((guide.guideSaleAmount/100).toFixed(2)) : guide[valueKey];
+    			}
+    			return tempData;
+    		}else if(productMode === '1') {
+    			var tempData = {
+					name: guide.gname
+				}
+    			if (typeof(guide.groupsData) === 'object' && guide.guideData.length > 0) {
+    				tempData.children = convertTreeData(guide.guideData, valueKey);
+    			}else {
+    				tempData.value = valueKey === 'groupsSaleAmount' ? parseFloat((guide.groupsSaleAmount/100).toFixed(2)) : guide[valueKey];
+    			}
+    			return tempData;
+			}
+    	});
     }
     // 获取树图数据
     function getCategoryRectangle(startDateFormat, endDateFormat) {
@@ -225,33 +188,87 @@ $(function() {
       if(!endDateFormat) {
           endDateFormat = curEndDate
       }
-      if(mode==0){//商品导航
-          url=ctx + 'GuideOrderAction/getGuideTotalListByParentStoreIdAction.do?storeId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
-      }else if(mode==1){
-          url=ctx + '/GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+      var ajaxUrl = '';
+      if(productMode === '0'){//商品导航
+    	  ajaxUrl = ctx + 'GuideOrderAction/getGuideTotalListByParentStoreIdAction.do?storeId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+      }else if(productMode === '1'){
+    	  ajaxUrl = ctx + 'GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
       }
       categoryRectangleStatisticsChart.showLoading('default', loadingOption);
+      categoryTop10StatisticsChart.showLoading('default', loadingOption);
       $.ajax({
-          url:url,
-          type: 'post',
-          success: function(response) {
-              if(response.code === 0) {
-                  categoryRectangleStatisticsChart.hideLoading();
-                  console.log(convertTreeData(response.data, 'guideSaleNumber'));
-                  console.log(convertTreeData(response.data, 'guideSaleAmount'));
-                  categoryRectangleStatisticsChart.setOption({
-                    series: [{
-                      data: convertTreeData(response.data, 'guideSaleNumber')
-                    }, {
-                      data: convertTreeData(response.data, 'guideSaleAmount')
-                    },]
-                  });
-              }
-          }
+    	  url: ajaxUrl,
+    	  type: 'post',
+    	  success: function(response) {
+    		  if(response.code === 0) {
+    			  // 显示矩形树图
+    			  var tempData = [];
+    			  if(productMode === '0') {
+    				  tempData = convertTreeData(response.data, sortMode === 'number' ? 'guideSaleNumber' : 'guideSaleAmount');
+    			  }else if(productMode === '1') {
+    				  tempData = convertTreeData(response.data, sortMode === 'number' ? 'groupsSaleNumber' : 'groupsSaleAmount');
+    			  }
+        		  categoryRectangleStatisticsChart.hideLoading();
+        		  categoryRectangleStatisticsChart.setOption({
+                      series: [{
+                    	  name: sortMode === 'number' ? '销量' : '销售额',
+                    	  data: tempData
+                      }]
+        		  });
+        		  // 显示top10柱状图
+        		  categoryTop10StatisticsChart.hideLoading();
+        		  if(productMode === '0') {
+	                  categoryTop10StatisticsChart.setOption({
+	                      yAxis: {
+	                    	  data: response.data.sort(function (a, b) {
+	                    		  return sortMode === 'number' ? (b.guideSaleNumber - a.guideSaleNumber) : (b.guideSaleAmount - a.guideSaleAmount);
+	                    	  }).map(function(item, index) {
+	                        	  if(index < 10){
+	                        		  return item.guideName
+	                        	  }
+	                          }).splice(0,10)
+	                      },
+	                      series: [{
+	                    	  name: sortMode === 'number' ? '销量' : '销售额',
+	                    	  data: response.data.sort(function (a, b) {
+	                    		  return sortMode === 'number' ? (b.guideSaleNumber - a.guideSaleNumber) : (b.guideSaleAmount - a.guideSaleAmount);
+	                    	  }).map(function(item, index) {
+	                        	  if(index < 10){
+	                        		  return sortMode === 'number' ? item.guideSaleNumber : parseFloat((item.guideSaleAmount/100).toFixed(2))
+	                        	  }
+	                          }).splice(0,10)
+	                      }]
+	                  });
+        		  }else if(productMode === '1') {
+        			  categoryTop10StatisticsChart.setOption({
+	                      yAxis: {
+	                    	  data: response.data.sort(function (a, b) {
+	                    		  return sortMode === 'number' ? (b.groupsSaleNumber - a.groupsSaleNumber) : (b.groupsSaleAmount - a.groupsSaleAmount);
+	                    	  }).map(function(item, index) {
+	                        	  if(index < 10){
+	                        		  return item.gname
+	                        	  }
+	                          }).splice(0,10)
+	                      },
+	                      series: [{
+	                    	  name: sortMode === 'number' ? '销量' : '销售额',
+	                    	  data: response.data.sort(function (a, b) {
+	                    		  return sortMode === 'number' ? (b.groupsSaleNumber - a.groupsSaleNumber) : (b.groupsSaleAmount - a.groupsSaleAmount);
+	                    	  }).map(function(item, index) {
+	                        	  if(index < 10){
+	                        		  return sortMode === 'number' ? item.groupsSaleNumber : parseFloat((item.groupsSaleAmount/100).toFixed(2))
+	                        	  }
+	                          }).splice(0,10)
+	                      }]
+	                  });
+        		  }
+    		  }
+    	  }
       })
     }
-    // 获取导航数据
-    function getTop10Category(parentGuideId,startDateFormat, endDateFormat) {
+    
+    // 获取top10导航/分组
+    function getTop10Category(parentGuideId, startDateFormat, endDateFormat) {
         if(!startDateFormat) {
             startDateFormat = curStartDate
         }
@@ -273,7 +290,6 @@ $(function() {
                             return(item.productSaleAmount / 100).toFixed(2)
                         })
                     ]
-
                     categoryTop10StatisticsChart.setOption({
                         yAxis: {
                             data: response.data.map(function(item) {
@@ -286,21 +302,12 @@ $(function() {
                             data: seriesData[1]
                         }]
                     });
-                    categoryTop10StatisticsChart.off('legendselectchanged');
-                    categoryTop10StatisticsChart.on('legendselectchanged', function(event) {
-                        if(event.name === '销量') {
-                            top10OrderBy = 'productSaleNumber'; // productSaleNumber:销量；productSaleAmount:销售金额；
-                        } else if(event.name === '销售额') {
-                            top10OrderBy = 'productSaleAmount'; // productSaleNumber:销量；productSaleAmount:销售金额；
-                        }
-                        getTop10Category();
-                    });
                 }
             }
         })
     }
     //切换一级导航/二级导航
-    $('input[name="guide-check"]').click(function(){
+    $('input[name="guide-check"]').on('ifChecked', function(){
         getAllGuide();
     })
     // 点击表格的一行查询对应导航/分类销售数据
@@ -308,7 +315,8 @@ $(function() {
         $('#productTable tbody tr.success').removeClass('success');
         $(this).addClass('success');
         $('#activeGoodsName').text($(this).find('.product-name').text());
-        getGoodsTrend($(this).find('.product-name').attr('data-id'));
+        curProductId = $(this).find('.product-name').attr('data-id');
+        getGoodsTrend(curProductId);
     })
     // 获取所有导航/分类数据
     function getAllGuide(startDateFormat, endDateFormat) {
@@ -318,11 +326,11 @@ $(function() {
         if(!endDateFormat) {
             endDateFormat = curEndDate
         }
-        var guidelevel=$('input[name="guide-check"]:checked').val()||0;
-        if(mode==0){
+        var guidelevel = $('input[name="guide-check"]:checked').val();
+        if(productMode === '0'){
              url=ctx + 'GuideOrderAction/getGuideTotalListByLevelAction.do?parentStoreId=' + '383' + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&guidelevel=' +guidelevel;
-        }else if(mode==1){//分组
-            url=ctx + '/GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + '383' + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&orderBy=';
+        }else if(productMode === '1'){//分组
+            url=ctx + 'GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + '383' + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&orderBy=';
         }
         $.ajax({
             url:url,
@@ -331,32 +339,30 @@ $(function() {
                 if(response.code === 0) {
                     $('#productTable tbody').html('');
 
-                        $.each(response.data, function(index, obj) {
-                            if(mode==0){
-                                var trHtml =
-                                '<tr>' +
-                                '<td class="product-name" data-id="' + obj.guideId + '">' + obj.guName + '</td>' +
-                                '<td>' + obj.guideId + '</td>' +
-                                '<td>' + obj.guideSaleNumber + '</td>' +
-                                '<td>' + (obj.guideSaleAmount / 100).toFixed(2) + '</td>' +
-                                '<td></td>' +
-                                '<td></td>' +
-                                '</tr>';
-                            }
-                            if(mode==1){
-                                var trHtml =
-                                '<tr>' +
-                                '<td class="product-name" data-id="' + obj.groupsId + '">' + obj.gname + '</td>' +
-                                '<td>' + obj.groupsId + '</td>' +
-                                '<td>' + obj.groupsSaleNumber + '</td>' +
-                                '<td>' + (obj.groupsSaleAmount / 100).toFixed(2) + '</td>' +
-                                '<td></td>' +
-                                '<td></td>' +
-                                '</tr>';
-                            }
-                            $('#productTable tbody').append(trHtml);
-                        });
-                        $('#productTable').DataTable();
+                    $.each(response.data, function(index, obj) {
+                        if(productMode === '0'){
+                            var trHtml =
+                            '<tr>' +
+                            '<td class="product-name" data-id="' + obj.guideId + '">' + obj.guName + '</td>' +
+                            '<td>' + obj.guideSaleNumber + '</td>' +
+                            '<td>' + (obj.guideSaleAmount / 100).toFixed(2) + '</td>' +
+                            '<td></td>' +
+                            '<td></td>' +
+                            '</tr>';
+                        }
+                        if(productMode === '1'){
+                            var trHtml =
+                            '<tr>' +
+                            '<td class="product-name" data-id="' + obj.groupsId + '">' + obj.gname + '</td>' +
+                            '<td>' + obj.groupsSaleNumber + '</td>' +
+                            '<td>' + (obj.groupsSaleAmount / 100).toFixed(2) + '</td>' +
+                            '<td></td>' +
+                            '<td></td>' +
+                            '</tr>';
+                        }
+                        $('#productTable tbody').append(trHtml);
+                    });
+                    $('#productTable').DataTable();
                 }
             }
         })
@@ -435,7 +441,7 @@ $(function() {
 
     // 切换按日、周、月统计
     $('body').on('click', '.chart-tabs#goodTrendType span', function(){
-        getGoodsTrend($('#productTable tbody tr.success').find('.product-name').attr('data-id'))
+        getGoodsTrend(curProductId)
     })
     // 查询某一导航/分类的销售数据
     function getGoodsTrend (groupsId, startDateFormat, endDateFormat) {
@@ -446,9 +452,9 @@ $(function() {
             endDateFormat = curEndDate
         }
         goodsTrendStatisticsChart.showLoading('default', loadingOption);
-        if(mode==0){
+        if(productMode === '0'){
              url=ctx + 'GuideOrderAction/getGuideOrderTotalListByDateAction.do?guideId=' + groupsId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat+ '&orderBy=&dataType=' + $('#goodTrendType span.active').attr('data-value');
-        }else if(mode==1){//分组
+        }else if(productMode === '1'){//分组
             url=ctx + 'GroupsOrderAction/getGroupsOrderTotalListByDate.do?groupsId=' + groupsId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&orderBy=&dataType=' + $('#goodTrendType span.active').attr('data-value');
         }
         $.ajax({
@@ -458,16 +464,16 @@ $(function() {
                 if(response.code === 0) {
                     var seriesData = [
                         response.data.map(function(item) {
-                            if(mode==0){
+                            if(productMode === '0'){
                                return item.guideSaleNumber
-                           }else if(mode==1){
+                           }else if(productMode === '1'){
                             return item.groupsSaleNumber
                            }
                         }),
                         response.data.map(function(item) {
-                            if(mode==0){
+                            if(productMode === '0'){
                                 return(item.guideSaleAmount / 100).toFixed(2)
-                            }else if(mode==1){
+                            }else if(productMode === '1'){
                                 return(item.groupsSaleAmount / 100).toFixed(2)
                             }
                         })
@@ -489,14 +495,12 @@ $(function() {
             }
         })
     }
-
+    
+    // 初始化数据
     curStartDate = moment().subtract(6, 'days').format('YYYY-MM-DD');
     curEndDate = moment().format('YYYY-MM-DD');
-    // 初始化数据
     getCategoryRectangle();
-    getTop10Category();
     getAllGuide();
-
     // 选择时间段
     $('#everyDateRange').daterangepicker(dateRangeOption);
     $('#everyDateRange').on('apply.daterangepicker', function(ev, picker) {
@@ -504,30 +508,37 @@ $(function() {
         $('#everyDateChange span').removeClass('active');
         curStartDate = picker.startDate.format('YYYY-MM-DD');
         curEndDate = picker.endDate.format('YYYY-MM-DD');
-        getTop10Category();
+        getCategoryRectangle();
         getAllGuide();
+        if(curProductId){
+        	getGoodsTrend(curProductId);
+        }
     });
     $('#everyDateChange span').click(function() {
         $('#everyDateRange span').html('点击选择日期');
         var dateRange = parseInt($(this).attr('data-value'));
         curStartDate = moment().subtract(dateRange - 1, 'days').format('YYYY-MM-DD');
         curEndDate = moment().format('YYYY-MM-DD')
-        getTop10Category();
-        getAllGuide();
-    })
-    //切换模式，商品导航/活动分组
-    $('.category-style .mode').click(function(){
-        mode=$(this).attr('data-mode');
-        if(mode==1){
-            $('.table-check').hide();
-        }else{
-            $('.table-check').show();
-        }
-        $('.mode').removeClass('active')
-        $(this).addClass('active');
         getCategoryRectangle();
-        getTop10Category();
+        getAllGuide();
+        if(curProductId){
+        	getGoodsTrend(curProductId);
+        }
+    })
+    // 切换商品导航/活动分组
+    $('#productsModeChange span').click(function(){
+    	productMode = $(this).attr('data-value');
+    	if(productMode === '0'){
+    		$('.table-check').show();
+    	}else{
+    		$('.table-check').hide();
+    	}
+        getCategoryRectangle();
         getAllGuide();
     })
-
+    // 切换销量和销售额
+    $('#sortModeChange span').click(function(){
+    	sortMode  = $(this).attr('data-value');
+    	getCategoryRectangle();
+    })
 })

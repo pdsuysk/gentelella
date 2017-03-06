@@ -778,21 +778,13 @@ $(function(){
 		}
 	})
 	// 设置会员城市数据
-	// $.ajax({
-	// 	url: ctx + 'CustomerCityAction/getCustomerCityTotalListAction.do?parentStoreId=' + storeId,
-	// 	type: 'post',
-	// 	success: function (response ) {
-	// 		if (response.code === 0) {
-	// 			console.log([
-	// 			    convertData1111(response.data),
-	// 			    convertData1111(response.data.sort(function (a, b) {
-	// 			        return b.value - a.value;
-	// 			    }).slice(0, 6)),
-	// 					convertData1111(response.data).sort(function (a, b) {
-	// 			        return b.value - a.value;
-	// 			    }).slice(0, 21)
-	// 			])
-	// 		}
-	// 	}
-	// })
+	$.ajax({
+		url: ctx + 'CustomerCityAction/getCustomerCityTotalListAction.do?parentStoreId=' + storeId,
+		type: 'post',
+		success: function (response ) {
+			if (response.code === 0) {
+				console.log(response.data)
+			}
+		}
+	})
 })
