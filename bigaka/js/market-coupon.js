@@ -363,10 +363,10 @@ $(function() {
 								name: '发放'
 							}, {
 								value: (response.data.collectNumberTotal / response.data.quantityTotal * 100).toFixed(2),
-								name: '领取率'
+								name: '平均领取率'
 							}, {
 								value: (response.data.appliedAmountTotal / response.data.quantityTotal * 100).toFixed(2),
-								name: '核销率'
+								name: '平均核销率'
 							}, ]
 						}, {}]
 					});

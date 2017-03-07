@@ -3,6 +3,8 @@ function resetCharts() {
 		this.resize();
 	})
 }
+var curStartDate; // 当前选择的时间段
+var curEndDate; // 当前选择的时间段
 $(function() {
 	window.pageEcharts = []; // 记录页面上所有的echart，方便统一resize
 	$('#menu_toggle').on('click', function() {
@@ -20,6 +22,11 @@ $(function() {
     placement: 'bottom',
     trigger: 'hover'
   })
+  
+  $('body').on('click', '.chart-tabs#orderTrendType span', function() {
+		getEveryOrderData();
+		getReturnOrderData();
+	})
 
   // 总量分析表
 	var salesStatisticsChart = echarts.init(document.getElementById('salesStatistics'));
@@ -191,26 +198,40 @@ $(function() {
 	returnOrderNumberStatisticsChart.setOption(returnOrderOption);
 	returnOrderMoneyStatisticsChart.setOption(returnOrderOption);
 
-	getTotalOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
-	getEveryOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
-	getReturnOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+
+	curStartDate = moment().subtract(6, 'days').format('YYYY-MM-DD');
+	curEndDate = moment().format('YYYY-MM-DD');
+	
+	getTotalOrderData();
+	getEveryOrderData();
+	getReturnOrderData();
 	$('#everyDateRange').daterangepicker(dateRangeOption);
 	$('#everyDateRange').on('apply.daterangepicker', function(ev, picker) {
 			$('#everyDateRange span').html(picker.startDate.format('YYYY.MM.DD') + ' - ' + picker.endDate.format('YYYY.MM.DD'));
 			$('#everyDateChange span').removeClass('active');
-			getTotalOrderData(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
-			getEveryOrderData(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
-			getReturnOrderData(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
+			curStartDate = picker.startDate.format('YYYY-MM-DD');
+			curEndDate = picker.endDate.format('YYYY-MM-DD');
+			getTotalOrderData();
+			getEveryOrderData();
+			getReturnOrderData();
 		});
 	$('#everyDateChange span').click(function(){
 		$('#everyDateRange span').html('点击选择日期');
 		var dateRange = parseInt($(this).attr('data-value'));
-		getTotalOrderData(moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
-		getEveryOrderData(moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
-		getReturnOrderData(moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+		curStartDate = moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD');
+		curEndDate = moment().format('YYYY-MM-DD');
+		getTotalOrderData();
+		getEveryOrderData();
+		getReturnOrderData();
 	})
 	// 总订单数和销售额
 	function getTotalOrderData (startDateFormat, endDateFormat) {
+		if(!startDateFormat) {
+			startDateFormat = curStartDate
+		}
+		if(!endDateFormat) {
+			endDateFormat = curEndDate
+		}
 		$.ajax({
 			url: ctx + 'OrderStoreDateAction/getOSDTotal.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
 			type: 'post',
@@ -242,9 +263,15 @@ $(function() {
 	}
 	// 每日订单数和销售额
 	function getEveryOrderData (startDateFormat, endDateFormat) {
+		if(!startDateFormat) {
+			startDateFormat = curStartDate
+		}
+		if(!endDateFormat) {
+			endDateFormat = curEndDate
+		}
 		salesStatisticsChart.showLoading('default', loadingOption);
 		$.ajax({
-			url: ctx + 'OrderStoreDateAction/getStoreTotalListByDate.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
+			url: ctx + 'OrderStoreDateAction/getStoreTotalListByDate.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&dataType=' + $('#orderTrendType span.active').attr('data-value'),
 			type: 'post',
 			success: function (response) {
 				if (response.code === 0) {
@@ -285,9 +312,15 @@ $(function() {
 	}
 	// 退单数据
 	function getReturnOrderData (startDateFormat, endDateFormat) {
+		if(!startDateFormat) {
+			startDateFormat = curStartDate
+		}
+		if(!endDateFormat) {
+			endDateFormat = curEndDate
+		}
 		returnOrderNumberStatisticsChart.showLoading('default', loadingOption);
 		$.ajax({
-			url: ctx + 'ReturnOrderStoreDateAction/getReturnOrderTotalListByDate.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
+			url: ctx + 'ReturnOrderStoreDateAction/getReturnOrderTotalListByDate.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&dataType=' + $('#orderTrendType span.active').attr('data-value'),
 			type: 'post',
 			success: function (response) {
 				if (response.code === 0) {

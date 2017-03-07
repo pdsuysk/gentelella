@@ -3,6 +3,9 @@ function resetCharts() {
 		this.resize();
 	})
 }
+var curStartDate; // 当前选择的时间段
+var curEndDate; // 当前选择的时间段
+var curStoreId = '';
 $(function() {
 	window.pageEcharts = []; // 记录页面上所有的echart，方便统一resize
 	$('#menu_toggle').on('click', function() {
@@ -118,21 +121,38 @@ $(function() {
 		}]
 	});
 
-
-	getAllShopData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+	curStartDate = moment().subtract(6, 'days').format('YYYY-MM-DD');
+	curEndDate = moment().format('YYYY-MM-DD');
+	getAllShopData(curStartDate, curEndDate);
 	$('#everyDateRange').daterangepicker(dateRangeOption);
 	$('#everyDateRange').on('apply.daterangepicker', function(ev, picker) {
 		$('#everyDateRange span').html(picker.startDate.format('YYYY.MM.DD') + ' - ' + picker.endDate.format('YYYY.MM.DD'));
 		$('#everyDateChange span').removeClass('active');
-		getAllShopData(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
+		curStartDate = picker.startDate.format('YYYY-MM-DD');
+		curEndDate = picker.endDate.format('YYYY-MM-DD');
+		getAllShopData();
 	});
 	$('#everyDateChange span').click(function(){
 		$('#everyDateRange span').html('点击选择日期');
 		var dateRange = parseInt($(this).attr('data-value'));
-		getAllShopData(moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+		curStartDate = moment().subtract(dateRange-1, 'days').format('YYYY-MM-DD');
+		curEndDate = moment().format('YYYY-MM-DD');
+		getAllShopData();
+	})
+	$('body').on('click', '.chart-tabs#shopTrendType span', function() {
+		if(curStoreId){
+			getTotalOrderData(curStoreId);
+			getEveryOrderData(curStoreId);
+		}
 	})
 	// 所有门店数据
 	function getAllShopData (startDateFormat, endDateFormat) {
+		if(!startDateFormat) {
+			startDateFormat = curStartDate
+		}
+		if(!endDateFormat) {
+			endDateFormat = curEndDate
+		}
 		allShopStatisticsChart.showLoading('default', loadingOption);
 		$.ajax({
 			url: ctx + 'OrderStoreDateAction/getStoreTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
@@ -236,8 +256,9 @@ $(function() {
 								}]
 							});
 							$('#selectedStoreName').text(newSeriesData[event.seriesIndex][event.dataIndex].name)
-							getTotalOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), newSeriesData[event.seriesIndex][event.dataIndex].id);
-							getEveryOrderData(moment().subtract(6, 'days').format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'), newSeriesData[event.seriesIndex][event.dataIndex].id);
+							curStoreId = newSeriesData[event.seriesIndex][event.dataIndex].id;
+							getTotalOrderData(curStoreId);
+							getEveryOrderData(curStoreId);
 						}
 					});
 					allShopStatisticsChart.off('legendselectchanged');
@@ -378,7 +399,13 @@ $(function() {
   });
 
 	// 总订单数和销售额
-	function getTotalOrderData (startDateFormat, endDateFormat, subStoreId) {
+	function getTotalOrderData (subStoreId, startDateFormat, endDateFormat) {
+		if(!startDateFormat) {
+			startDateFormat = curStartDate
+		}
+		if(!endDateFormat) {
+			endDateFormat = curEndDate
+		}
 		if(!subStoreId){
 			subStoreId = storeId;
 		}
@@ -395,13 +422,19 @@ $(function() {
 		})
 	}
 	// 每日订单数和销售额
-	function getEveryOrderData (startDateFormat, endDateFormat, subStoreId) {
+	function getEveryOrderData (subStoreId, startDateFormat, endDateFormat) {
+		if(!startDateFormat) {
+			startDateFormat = curStartDate
+		}
+		if(!endDateFormat) {
+			endDateFormat = curEndDate
+		}
 		oneShopStatisticsChart.showLoading('default', loadingOption);
 		if(!subStoreId){
 			subStoreId = storeId;
 		}
 		$.ajax({
-			url: ctx + 'OrderStoreDateAction/getSubStoreTotalListByDate.do?storeId=' + subStoreId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
+			url: ctx + 'OrderStoreDateAction/getSubStoreTotalListByDate.do?storeId=' + subStoreId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&dataType=' + $('#shopTrendType span.active').attr('data-value'),
 			type: 'post',
 			success: function (response) {
 				if (response.code === 0) {

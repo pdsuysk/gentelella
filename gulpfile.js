@@ -40,8 +40,8 @@ gulp.task('sass-minify', function() {
 });
 
 gulp.task('browser-sync', function() {
-    var apiProxy = proxy('/wx_big_data', {
-      target: 'http://test02.bigaka.com',
+    var apiProxy = proxy('/wx-big-data', {
+      target: 'http://172.19.71.129:9101',
       // target: 'http://company1.bigaka.com:9101',
       changeOrigin: true,
       logLevel: 'debug'
@@ -52,7 +52,7 @@ gulp.task('browser-sync', function() {
           middleware: [apiProxy]
         },
         ghostMode: false, // 关闭镜像功能
-        port: 9006,
+        port: 18204,
         startPath: './bigaka/html/index.html'
     });
 });
