@@ -184,8 +184,8 @@ $(function() {
 		$.ajax({
 			url: ctx + 'InfoProductNavAction/findByStoreIdActions.do?parentStoreId=' + storeId + '&level=-1',
 			type: 'post',
-			success: function(response_){
-				if(response_.code === 0){
+			success: function(response_) {
+				if(response_.code === 0) {
 					var fullGuideData = response_.data;
 					if(!startDateFormat) {
 						startDateFormat = curStartDate
@@ -195,7 +195,7 @@ $(function() {
 					}
 					var ajaxUrl = '';
 					if(productMode === '0') { //商品导航
-//						ajaxUrl = ctx + 'GuideOrderAction/getGuideTotalListByParentStoreIdAction.do?storeId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
+						//						ajaxUrl = ctx + 'GuideOrderAction/getGuideTotalListByParentStoreIdAction.do?storeId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
 						ajaxUrl = ctx + 'GuideOrderAction/getGuideSaleTotalListForPStoreIdByGuideIdAction.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
 					} else if(productMode === '1') {
 						ajaxUrl = ctx + 'GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat;
@@ -223,22 +223,22 @@ $(function() {
 									var tempConvertDatas = [];
 									$.each(fullGuideData, function(index, guide) {
 										if(guide.parentId === 0) {
-											if(tempParentIds.indexOf(guide.id) > -1){
+											if(tempParentIds.indexOf(guide.id) > -1) {
 												tempConvertDatas[tempParentIds.indexOf(guide.id)].guideName = guide.name;
 												tempConvertDatas[tempParentIds.indexOf(guide.id)].guideSaleAmount = guide.guideSaleAmount ? guide.guideSaleAmount : 0;
 												tempConvertDatas[tempParentIds.indexOf(guide.id)].guideSaleNumber = guide.guideSaleNumber ? guide.guideSaleNumber : 0;
-											}else {
+											} else {
 												tempParentIds.push(guide.id);
 												tempConvertDatas.push({
 													guideData: [],
 													guideId: guide.id,
 													guideName: guide.name,
-													guideSaleAmount: guide.guideSaleAmount ?　guide.guideSaleAmount : 0,
+													guideSaleAmount: guide.guideSaleAmount ? 　guide.guideSaleAmount : 0,
 													guideSaleNumber: guide.guideSaleNumber ? guide.guideSaleNumber : 0
 												})
 											}
-										}else {
-											if(tempParentIds.indexOf(guide.parentId) > -1){
+										} else {
+											if(tempParentIds.indexOf(guide.parentId) > -1) {
 												tempConvertDatas[tempParentIds.indexOf(guide.parentId)].guideData.push({
 													guideData: [],
 													guideId: guide.id,
@@ -246,7 +246,7 @@ $(function() {
 													guideSaleAmount: guide.guideSaleAmount ? guide.guideSaleAmount : 0,
 													guideSaleNumber: guide.guideSaleNumber ? guide.guideSaleNumber : 0
 												})
-											}else {
+											} else {
 												tempParentIds.push(guide.parentId);
 												tempConvertDatas.push({
 													guideData: [{
@@ -264,7 +264,6 @@ $(function() {
 											}
 										}
 									});
-									console.log(tempConvertDatas)
 									tempData = convertTreeData(tempConvertDatas, sortMode === 'number' ? 'guideSaleNumber' : 'guideSaleAmount');
 //									tempData = convertTreeData(response.data, sortMode === 'number' ? 'guideSaleNumber' : 'guideSaleAmount');
 								} else if(productMode === '1') {
@@ -277,6 +276,11 @@ $(function() {
 										data: tempData
 									}]
 								});
+								console.log(tempData)
+								categoryRectangleStatisticsChart.off('click');
+								categoryRectangleStatisticsChart.on('click', function(params){
+									console.log(params)
+								})
 								// 显示top10柱状图
 								categoryTop10StatisticsChart.hideLoading();
 								if(productMode === '0') {
@@ -393,9 +397,9 @@ $(function() {
 		}
 		var guidelevel = $('input[name="guide-check"]:checked').val();
 		if(productMode === '0') {
-			url = ctx + 'GuideOrderAction/getGuideTotalListByLevelAction.do?parentStoreId=' + '383' + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&guidelevel=' + guidelevel;
+			url = ctx + 'GuideOrderAction/getGuideTotalListByLevelAction.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&guidelevel=' + guidelevel;
 		} else if(productMode === '1') { //分组
-			url = ctx + 'GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + '383' + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&orderBy=';
+			url = ctx + 'GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&orderBy=';
 		}
 		$.ajax({
 			url: url,
