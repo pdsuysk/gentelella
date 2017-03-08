@@ -42,7 +42,7 @@ gulp.task('sass-minify', function() {
 gulp.task('browser-sync', function() {
     var apiProxy = proxy('/wx-big-data', {
 //  var apiProxy = proxy('/wx_big_data', {
-      target: 'http://172.19.71.20:20041',
+      target: 'http://172.19.71.129:18208',
 //   	target: 'http://test01.bigaka.com',
       changeOrigin: true,
       logLevel: 'debug'

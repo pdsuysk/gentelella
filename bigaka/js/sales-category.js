@@ -18,6 +18,15 @@ $(function() {
 	$(window).resize(function() {
 		resetCharts();
 	});
+	// tips
+	var addUpPercentTipsContent =
+    '累计占比，针对销量及销售额指标，指对应品类/商品，在所有品类/商品中，按销量/销售额降序排列后，按对应顺序累计而成，不随列表排序规则变化。旨在通过二八法则找到关键品类/商品。'
+  $('#addUpPercentTips').popover({
+    content: addUpPercentTipsContent,
+    html: true,
+    placement: 'bottom',
+    trigger: 'hover'
+  })
 	// 初始化品类矩形树状chart
 	window.categoryRectangleStatisticsChart = echarts.init(document.getElementById('categoryRectangleStatistics'));
 	pageEcharts.push(categoryRectangleStatisticsChart);
@@ -407,31 +416,98 @@ $(function() {
 			url: url,
 			type: 'post',
 			success: function(response) {
-				$('#productTable').hideLoading();
 				if(response.code === 0) {
 					productTable.clear().draw();
-					$.each(response.data, function(index, obj) {
-						if(productMode === '0') {
-							var trHtml =
-								'<tr class="' + (curProductId == obj.guideId ? 'success' : '') + '">' +
-								'<td class="product-name" data-id="' + obj.guideId + '">' + obj.guName + '</td>' +
-								'<td>' + obj.guideSaleNumber + '</td>' +
-								'<td>' + (obj.guideSaleAmount / 100).toFixed(2) + '</td>' +
-								'<td></td>' +
-								'<td></td>' +
-								'</tr>';
+					$.ajax({ // 获取门店所有商品总销量和总销售额
+						url: ctx + 'ProductOrderAction/getProductTotalByPStoreIdAction.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
+						type: 'post',
+						success: function(response_){
+							if(response_.code === 0){
+								var productSaleNumber = response_.data.productSaleNumber; // 总销售量
+								var productSaleAmount = response_.data.productSaleAmount; // 总销售额
+								
+								if(productMode === '0') {
+									response.data.sort(function(a, b){ // 销售量由高到低排序，计算累计销量占比
+										return b.guideSaleNumber - a.guideSaleNumber
+									});
+									$.each(response.data, function(index, product) {
+										var addUpSaleNumberPercent;
+										if(index === 0){
+											addUpSaleNumberPercent = product.guideSaleNumber / productSaleNumber * 100
+										}else{
+											addUpSaleNumberPercent = response.data[index - 1].addUpSaleNumberPercent + product.guideSaleNumber / productSaleNumber * 100
+										}
+										response.data[index].addUpSaleNumberPercent = addUpSaleNumberPercent;
+									});
+									
+									response.data.sort(function(a, b){ // 销售量由高到低排序，计算累计销售额占比
+										return b.guideSaleAmount - a.guideSaleAmount
+									});
+									$.each(response.data, function(index, product) {
+										var addUpSaleAmountPercent;
+										if(index === 0){
+											addUpSaleAmountPercent = product.guideSaleAmount / productSaleAmount * 100
+										}else{
+											addUpSaleAmountPercent = response.data[index - 1].addUpSaleAmountPercent + product.guideSaleAmount / productSaleAmount * 100
+										}
+										response.data[index].addUpSaleAmountPercent = addUpSaleAmountPercent;
+									});
+									
+									$.each(response.data, function(index, obj) {
+										var trHtml =
+											'<tr class="' + (curProductId == obj.guideId ? 'success' : '') + '">' +
+											'<td class="product-name" data-id="' + obj.guideId + '">' + obj.guName + '</td>' +
+											'<td>' + obj.guideSaleNumber + '</td>' +
+											'<td>' + (obj.guideSaleAmount / 100).toFixed(2) + '</td>' +
+											'<td>' + obj.addUpSaleNumberPercent.toFixed(2) + '%</td>' +
+											'<td>' + obj.addUpSaleAmountPercent.toFixed(2) + '%</td>' +
+											'</tr>';
+										productTable.row.add($(trHtml)).draw();
+									});
+								}
+								if(productMode === '1') {
+									response.data.sort(function(a, b){ // 销售量由高到低排序，计算累计销量占比
+										return b.groupsSaleNumber - a.groupsSaleNumber
+									});
+									$.each(response.data, function(index, product) {
+										var addUpSaleNumberPercent;
+										if(index === 0){
+											addUpSaleNumberPercent = product.groupsSaleNumber / productSaleNumber * 100
+										}else{
+											addUpSaleNumberPercent = response.data[index - 1].addUpSaleNumberPercent + product.groupsSaleNumber / productSaleNumber * 100
+										}
+										response.data[index].addUpSaleNumberPercent = addUpSaleNumberPercent;
+									});
+									
+									response.data.sort(function(a, b){ // 销售量由高到低排序，计算累计销售额占比
+										return b.groupsSaleAmount - a.groupsSaleAmount
+									});
+									$.each(response.data, function(index, product) {
+										var addUpSaleAmountPercent;
+										if(index === 0){
+											addUpSaleAmountPercent = product.groupsSaleAmount / productSaleAmount * 100
+										}else{
+											addUpSaleAmountPercent = response.data[index - 1].addUpSaleAmountPercent + product.groupsSaleAmount / productSaleAmount * 100
+										}
+										response.data[index].addUpSaleAmountPercent = addUpSaleAmountPercent;
+									});
+									
+									$.each(response.data, function(index, obj) {
+										var trHtml =
+											'<tr class="' + (curProductId == obj.groupsId ? 'success' : '') + '">' +
+											'<td class="product-name" data-id="' + obj.groupsId + '">' + obj.gname + '</td>' +
+											'<td>' + obj.groupsSaleNumber + '</td>' +
+											'<td>' + (obj.groupsSaleAmount / 100).toFixed(2) + '</td>' +
+											'<td>' + obj.addUpSaleNumberPercent.toFixed(2) + '%</td>' +
+											'<td>' + obj.addUpSaleAmountPercent.toFixed(2) + '%</td>' +
+											'</tr>';
+										productTable.row.add($(trHtml)).draw();
+									});
+								}
+								
+								$('#productTable').hideLoading();
+							}
 						}
-						if(productMode === '1') {
-							var trHtml =
-								'<tr class="' + (curProductId == obj.groupsId ? 'success' : '') + '">' +
-								'<td class="product-name" data-id="' + obj.groupsId + '">' + obj.gname + '</td>' +
-								'<td>' + obj.groupsSaleNumber + '</td>' +
-								'<td>' + (obj.groupsSaleAmount / 100).toFixed(2) + '</td>' +
-								'<td></td>' +
-								'<td></td>' +
-								'</tr>';
-						}
-						productTable.row.add($(trHtml)).draw();
 					});
 				}
 			}

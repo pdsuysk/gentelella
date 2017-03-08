@@ -173,6 +173,7 @@ $(function() {
 					phoneCustomerTotal: geoCoord.concat(data[i].phoneCustomerTotal)
 				});
 			}else{
+				debugger
 			}
 		}
 		return res;

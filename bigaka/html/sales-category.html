@@ -35,7 +35,7 @@
         <div class="col-md-3 menu_fixed left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>零售大数据引擎</span></a>
+              <a href="index.html" class="site_title"><i class="fa fa-pie-chart"></i> <span>零售大数据引擎</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -43,11 +43,11 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="../img/logo.jpg" alt="..." class="img-circle profile_img">
+                <img src="" class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>欢迎您,</span>
-                <h2>一只蛤蛤</h2>
+                <h2></h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -101,19 +101,11 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="../img/logo.jpg" alt="">一只蛤蛤
+                    <img src="" alt="">
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="javascript:;"> Profile</a></li>
-                    <li>
-                      <a href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                    </li>
-                    <li><a href="javascript:;">Help</a></li>
-                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    <li><a class="head-logout"><i class="fa fa-sign-out pull-right"></i>切换用户</a></li>
                   </ul>
                 </li>
                 <a class="refresh-data">刷新</a>
@@ -192,7 +184,11 @@
                         <th>导航名称/活动分组</th>
                         <th>销量</th>
                         <th>销售额</th>
-                        <th>销量累计占比</th>
+                        <th>销量累计占比
+                        	<a id="addUpPercentTips">
+				                		<i class="fa fa-question-circle"></i>
+				                	</a>
+                       	</th>
                         <th>销售额累计占比</th>
                       </tr>
                     </thead>

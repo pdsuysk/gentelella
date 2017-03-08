@@ -536,7 +536,6 @@ $(function() {
 			url: ctx + 'CouponDateAction/getCouponTotalGroupByCouponId.do?storeId=' + storeId + '&status=' + couponStatus + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
 			type: 'post',
 			success: function(response) {
-				$('#couponTable').hideLoading()
 				if(response.code === 0) {
 					couponTable.clear().draw();
 					$.each(response.data, function(index, coupon) {
@@ -568,6 +567,7 @@ $(function() {
 							'</tr>';
 						couponTable.row.add($(trHtml)).draw();
 					});
+					$('#couponTable').hideLoading()
 				}
 			}
 		})

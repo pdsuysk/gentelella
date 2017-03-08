@@ -84,6 +84,24 @@ $.ajaxSetup({
 	}
 })
 $(function() {
+	$('.refresh-data').click(function(){ //刷新
+		window.location.reload();
+	});
+	$('.head-logout').click(function(){ // 切换用户
+		window.location.href = 'http://test02.bigaka.com/b';
+	})
+	$.ajax({
+		type: 'post',
+		url: ctx + 'LoginAction/getStoreInfoByTokenAction.do?token=' + token,
+		success: function(response){
+			if(response.code === 0){
+				console.log(response.data)
+				$('.profile_info h2').text(response.data.storeUserInfo.userName);
+				$('.user-profile img').after(response.data.storeUserInfo.userName)
+				$('.profile_pic img, .user-profile img').attr('src', 'https://photoshop.bigaka.com/photos' + response.data.storeUserInfo.photoUrl)
+			}
+		}
+	});
 	$('body').on('click', '.chart-tabs span', function() {
 		$(this).parents('.chart-tabs').find('span').removeClass('active');
 		$(this).addClass('active');
