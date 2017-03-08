@@ -7,6 +7,8 @@ var curStartDate;
 var curEndDate;
 var curCouponId = '';
 $(function() {
+	var couponTable = $('#couponTable').DataTable(datatableLanguage);
+
 	window.pageEcharts = []; // 记录页面上所有的echart，方便统一resize
 	$('#menu_toggle').on('click', function() {
 		resetCharts();
@@ -235,38 +237,38 @@ $(function() {
 			trigger: 'axis'
 		},
 		grid: {
-			left : '2%',
-			top : 20,
-			right : 20,
-			bottom : 20,
-			containLabel : true
+			left: '2%',
+			top: 20,
+			right: 20,
+			bottom: 20,
+			containLabel: true
 		},
 		xAxis: [{
-			splitLine : {
-				lineStyle : {
-					type : 'dashed'
+			splitLine: {
+				lineStyle: {
+					type: 'dashed'
 				}
 			},
-			axisLine : {
-				lineStyle : {
-					color : '#888888'
+			axisLine: {
+				lineStyle: {
+					color: '#888888'
 				}
 			},
-			axisTick : {
-				alignWithLabel : true
+			axisTick: {
+				alignWithLabel: true
 			},
 			type: 'category',
 			data: []
 		}],
 		yAxis: [{
-			splitLine : {
-				lineStyle : {
-					type : 'dashed'
+			splitLine: {
+				lineStyle: {
+					type: 'dashed'
 				}
 			},
-			axisLine : {
-				lineStyle : {
-					color : '#888888'
+			axisLine: {
+				lineStyle: {
+					color: '#888888'
 				}
 			},
 			type: 'value'
@@ -381,7 +383,7 @@ $(function() {
 	// 切换优惠券状态
 	$('body').on('click', '.chart-tabs#couponStatusChange span', function() {
 		getAllCouponData($(this).attr('data-value'));
-	})
+	});
 	$('#tableShowUnableCheck').on('ifChecked', function() {
 		getAllCouponData(2)
 	});
@@ -396,7 +398,7 @@ $(function() {
 		curStartDate = picker.startDate.format('YYYY-MM-DD');
 		curEndDate = picker.endDate.format('YYYY-MM-DD');
 		getAllCouponData();
-		if(curCouponId){
+		if(curCouponId) {
 			getCouponTrend(curCouponId);
 		}
 	});
@@ -406,7 +408,7 @@ $(function() {
 		curStartDate = moment().subtract(dateRange - 1, 'days').format('YYYY-MM-DD');
 		curEndDate = moment().format('YYYY-MM-DD')
 		getAllCouponData();
-		if(curCouponId){
+		if(curCouponId) {
 			getCouponTrend(curCouponId);
 		}
 	})
@@ -509,7 +511,7 @@ $(function() {
 							})
 						}, {
 							data: response.data.map(function(item) {
-								return (item.couponOrderAmount / 100).toFixed(2)
+								return(item.couponOrderAmount / 100).toFixed(2)
 							})
 						}]
 					});
@@ -528,16 +530,18 @@ $(function() {
 		if(!endDateFormat) {
 			endDateFormat = curEndDate
 		}
+
+		$('#couponTable').showLoading()
 		$.ajax({
 			url: ctx + 'CouponDateAction/getCouponTotalGroupByCouponId.do?storeId=' + storeId + '&status=' + couponStatus + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
 			type: 'post',
 			success: function(response) {
+				$('#couponTable').hideLoading()
 				if(response.code === 0) {
-					console.log(response.data);
-					$('#couponTable tbody').html('');
+					couponTable.clear().draw();
 					$.each(response.data, function(index, coupon) {
 						var trHtml =
-							'<tr>' +
+							'<tr class="' + (curCouponId == coupon.couponId ? 'success' : '') + '">' +
 							'<td class="coupon-name" data-id="' + coupon.couponId + '" data-name="' + coupon.title + '">' + coupon.title;
 						if(coupon.status === 1) {
 							trHtml += '<span class="status-tag pull-right">未开始</span>'
@@ -561,10 +565,9 @@ $(function() {
 							'<td>' + coupon.couponOrderNumberTotal + '</td>' +
 							'<td>' + (coupon.couponOrderAmountTotal / 100).toFixed(2) + '</td>' +
 							'<td>' + (coupon.couponOrderPreferentialAmountTotal / 100).toFixed(2) + '</td>' +
-							'</tr>'
-						$('#couponTable tbody').append(trHtml);
+							'</tr>';
+						couponTable.row.add($(trHtml)).draw();
 					});
-					$('#couponTable').DataTable();
 				}
 			}
 		})

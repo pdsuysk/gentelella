@@ -351,11 +351,11 @@ $(function() {
 						},
 						series: [{
 							data: response.data.map(function(item){
-								return item.ORAckAcountTotal - item.ORAcountTotal
+								return ((item.ORAckAcountTotal - item.ORAcountTotal) / 100).toFixed(2);
 							})
 						}, {
 							data: response.data.map(function(item){
-								return item.ORAcountTotal
+								return (item.ORAcountTotal / 100).toFixed(2);
 							})
 						}]
 					});

@@ -10,6 +10,7 @@ var sortMode = 'number'; // number销量；amount销售额
 var productMode = '0'; // 0导航；1分组
 var curProductId = ''; // 选中产品id
 $(function() {
+	var productTable = $('#productTable').DataTable(datatableLanguage);
 	window.pageEcharts = []; // 记录页面上所有的echart，方便统一resize
 	$('#menu_toggle').on('click', function() {
 		resetCharts();
@@ -401,17 +402,18 @@ $(function() {
 		} else if(productMode === '1') { //分组
 			url = ctx + 'GroupsOrderAction/getGroupsOrderTotalList.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat + '&orderBy=';
 		}
+		$('#productTable').showLoading();
 		$.ajax({
 			url: url,
 			type: 'post',
 			success: function(response) {
+				$('#productTable').hideLoading();
 				if(response.code === 0) {
-					$('#productTable tbody').html('');
-
+					productTable.clear().draw();
 					$.each(response.data, function(index, obj) {
 						if(productMode === '0') {
 							var trHtml =
-								'<tr>' +
+								'<tr class="' + (curProductId == obj.guideId ? 'success' : '') + '">' +
 								'<td class="product-name" data-id="' + obj.guideId + '">' + obj.guName + '</td>' +
 								'<td>' + obj.guideSaleNumber + '</td>' +
 								'<td>' + (obj.guideSaleAmount / 100).toFixed(2) + '</td>' +
@@ -421,7 +423,7 @@ $(function() {
 						}
 						if(productMode === '1') {
 							var trHtml =
-								'<tr>' +
+								'<tr class="' + (curProductId == obj.groupsId ? 'success' : '') + '">' +
 								'<td class="product-name" data-id="' + obj.groupsId + '">' + obj.gname + '</td>' +
 								'<td>' + obj.groupsSaleNumber + '</td>' +
 								'<td>' + (obj.groupsSaleAmount / 100).toFixed(2) + '</td>' +
@@ -429,9 +431,8 @@ $(function() {
 								'<td></td>' +
 								'</tr>';
 						}
-						$('#productTable tbody').append(trHtml);
+						productTable.row.add($(trHtml)).draw();
 					});
-					$('#productTable').DataTable();
 				}
 			}
 		})
