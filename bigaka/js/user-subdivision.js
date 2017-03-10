@@ -84,6 +84,9 @@ $(function() {
 		title: { // 标题
 			show: false
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		tooltip: { // 鼠标悬浮提示框
 			position: 'top'
 		},
@@ -98,7 +101,7 @@ $(function() {
 			}]
 		},
 		grid: { // 网格
-			left: 10,
+			left: 0,
 			top: 40,
 			right: 20,
 			bottom: 10,
@@ -122,15 +125,16 @@ $(function() {
 		},
 		yAxis: {
 			type: 'category',
+			axisTick: {
+				show : false
+			},
 			splitLine: {
 				lineStyle: {
 					type: 'dashed'
 				}
 			},
 			axisLine: {
-				lineStyle: {
-					color: '#888888'
-				}
+				show: false
 			},
 			data: []
 		},
@@ -138,6 +142,7 @@ $(function() {
 			name: '手机会员',
 			type: 'bar',
 			stack: '全部会员',
+			barWidth : 25,
 			label: {
 				normal: {
 					show: true,
@@ -148,6 +153,7 @@ $(function() {
 			name: '微信会员',
 			type: 'bar',
 			stack: '全部会员',
+			barWidth : 25,
 			label: {
 				normal: {
 					show: true,
@@ -187,6 +193,9 @@ $(function() {
 		title: {
 			show: false
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		toolbox: {
 			orient: 'vertical',
 			right: '35%',
@@ -219,7 +228,7 @@ $(function() {
 			left: 0,
 			top: 0,
 			right: '35%',
-			center: [117.98561551896913, 31.205000490896193],
+			center: [110.98561551896913, 31.605000490896193],
 			zoom: 1.8,
 			label: {
 				emphasis: {
@@ -340,6 +349,7 @@ $(function() {
 				legendHoverLink: false,
 				type: 'bar',
 				symbol: 'none',
+				barWidth : 20,
 				data: [],
 				label: {
 					normal: {
@@ -360,6 +370,7 @@ $(function() {
 				legendHoverLink: false,
 				type: 'bar',
 				symbol: 'none',
+				barWidth : 20,
 				data: [],
 				label: {
 					normal: {

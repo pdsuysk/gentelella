@@ -36,6 +36,9 @@ $(function() {
 		title: {
 			show: false
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		tooltip: {
 			trigger: 'item',
 			formatter: '{b} : {c}%'
@@ -68,8 +71,12 @@ $(function() {
 	pageEcharts.push(couponTrendStatisticsChart);
 	// couponTrendStatisticsChart.showLoading('default', loadingOption);
 	couponTrendStatisticsChart.setOption({
+		color: ['#1ABB9C', '#7bd9a5', '#3fb1e3'],
 		title: {
 			show: false
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		tooltip: {
 			trigger: 'axis',
@@ -171,6 +178,9 @@ $(function() {
 		title: {
 			show: false
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		color: ['#1ABB9C', '#7bd9a5', '#3fb1e3'],
 		series: [{
 				name: '全部优惠券',
@@ -231,6 +241,9 @@ $(function() {
 	oneCouponStatisticsChart.setOption({
 		title: {
 			show: false
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		color: ['#1ABB9C', '#7bd9a5', '#3fb1e3'],
 		tooltip: {

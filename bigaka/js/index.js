@@ -116,6 +116,9 @@ $(function() {
 			right : 20,
 			bottom : 30
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		xAxis : {
 			type : 'value',
 			splitLine: {
@@ -154,7 +157,8 @@ $(function() {
 			data: []
 		},
 		series : [{
-			type : 'bar'
+			type : 'bar',
+			barWidth : 25
 		}]
 	}
 //	门店top5新增绑定手机会员***************************************************************************************************
@@ -188,6 +192,9 @@ $(function() {
 				fontFamily: 'sans-serif',
 				fontSize: 12,
 			}
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		tooltip : { // 鼠标悬浮提示框
 			position: 'top'
@@ -242,6 +249,9 @@ $(function() {
 				fontSize: 12,
 			}
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		tooltip : { // 鼠标悬浮提示框
 			position: 'top'
 		},
@@ -268,23 +278,25 @@ $(function() {
 			data : []
 		},
 		series : [{
-      name: '领取量',
-      type: 'bar',
-      label: {
+	      name: '领取量',
+	      type: 'bar',
+	      barWidth: 20,
+	      label: {
 				normal: {
 					show: true,
 					position: 'insideLeft',
 					formatter: '{b}',
 					textStyle: {
-						color: '#626c91'
+						color: '#626c91',
 					}
 				}
 			},
-    },
-    {
-      name: '核销量',
-      type: 'bar',
-      label: {
+	    },
+	    {
+	      name: '核销量',
+	      type: 'bar',
+	      barWidth: 20,
+	      label: {
 				normal: {
 					show: true,
 					position: 'insideLeft',
@@ -294,7 +306,7 @@ $(function() {
 					}
 				}
 			},
-    }]
+	    }]
 	})); // 生效配置
 
 // 设置数据 *********************************************************************

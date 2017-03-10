@@ -25,6 +25,9 @@ $(function() {
 		title : {
 			show : false
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		legend : {
 			data : [ '订单数', '销售额', '单均价' ],
 			selected : {
@@ -80,6 +83,7 @@ $(function() {
 			name : '订单数',
 			type : 'bar',
 			legendHoverLink : false,
+			barCategoryGap : '40%',
 			label : {
 				normal : {
 					position : 'top',
@@ -94,6 +98,7 @@ $(function() {
 			name : '销售额',
 			type : 'bar',
 			legendHoverLink : false,
+			barCategoryGap : '40%',
 			label : {
 				normal : {
 					position : 'top',
@@ -108,6 +113,7 @@ $(function() {
 			name : '单均价',
 			type : 'bar',
 			legendHoverLink : false,
+			barCategoryGap : '40%',
 			label : {
 				normal : {
 					position : 'top',
@@ -308,6 +314,9 @@ $(function() {
 	oneShopStatisticsColor = [ '#1ABB9C', '#7bd9a5', '#3fb1e3' ];
 	oneShopStatisticsChart.setOption({
     color: oneShopStatisticsColor,
+    textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
     tooltip: {
       trigger: 'axis'
     },

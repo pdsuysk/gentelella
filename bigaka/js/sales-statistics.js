@@ -38,6 +38,9 @@ $(function() {
     tooltip: {
       trigger: 'axis'
     },
+    textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
     grid: {
       left: 0,
 			bottom: 20,
@@ -138,6 +141,9 @@ $(function() {
     title: {
       show: false
     },
+    textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		color: returnOrderColor,
     tooltip : {
       trigger: 'axis'

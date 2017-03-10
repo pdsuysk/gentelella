@@ -35,6 +35,10 @@ $(function() {
 		title: {
 			show: false
 		},
+		color: ['#1ABB9C', '#7bd9a5', '#3fb1e3'],
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		grid: { // 网格
 			left: 0,
 			top: 0,
@@ -50,8 +54,8 @@ $(function() {
 			top: 30,
 			width: '100%',
 			height: 660,
-			roam: false,
-			breadcrumb: {
+			roam: false,'
+			breadcrumb: {'
 				show: true,
 				left: 0,
 				top: 0
@@ -99,6 +103,9 @@ $(function() {
 		color: ['#1ABB9C', '#7bd9a5', '#3fb1e3'],
 		title: {
 			show: false
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		legend: {
 			show: false
@@ -523,6 +530,9 @@ $(function() {
 		color: goodsTrendStatisticsColor,
 		title: {
 			show: false
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		legend: {
 			data: ['销量', '销售额'],

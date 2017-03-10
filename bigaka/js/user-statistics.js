@@ -78,6 +78,9 @@ $(function() {
 		title : {
 			show : false
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		legend : {
 			data : [ '全部会员', '手机会员' ],
 			selected : {
@@ -85,7 +88,7 @@ $(function() {
 				'手机会员' : false
 			},
 			selectedMode : 'single',
-			left : '1%'
+			left : 0
 		},
 		tooltip : {
 			trigger : 'axis',
@@ -94,7 +97,7 @@ $(function() {
 			}
 		},
 		grid : { // 网格
-			left : '1%',
+			left : 0,
 			top : 40,
 			right : 30,
 			bottom : 40,
@@ -132,6 +135,7 @@ $(function() {
 			name : '全部会员',
 			type : 'bar',
 			legendHoverLink : false,
+			barCategoryGap : '40%',
 			label : {
 				normal : {
 					position : 'top',
@@ -146,6 +150,7 @@ $(function() {
 			name : '手机会员',
 			type : 'bar',
 			legendHoverLink : false,
+			barCategoryGap : '40%',
 			label : {
 				normal : {
 					position : 'top',
@@ -166,6 +171,9 @@ $(function() {
 		color : [ '#1ABB9C', '#7bd9a5', '#3fb1e3' ],
 		title : {
 			show : false
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		tooltip : {
 			trigger : 'item',
@@ -203,6 +211,9 @@ $(function() {
 		color : [ '#1ABB9C' ],
 		title : { // 标题
 			show : false
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		tooltip : { // 鼠标悬浮提示框
 			position : 'top'

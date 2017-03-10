@@ -35,6 +35,9 @@ $(function() {
 		title: {
 			show: false
 		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
+		},
 		legend: {
 			data: ['销量', '销售额'],
 			selected: {
@@ -250,6 +253,9 @@ $(function() {
 		color: goodsTrendStatisticsColor,
 		title: {
 			show: false
+		},
+		textStyle: {
+			fontFamily: 'Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif'
 		},
 		legend: {
 			data: ['销量', '销售额'],

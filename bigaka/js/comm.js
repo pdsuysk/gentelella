@@ -83,6 +83,14 @@ $.ajaxSetup({
 		xhr.setRequestHeader('token', token ? token : '');
 	}
 })
+$.ajax({
+	url: '../js/echarts/wonderland.json',
+	type: 'get',
+	async: false,
+	success: function(response){
+		echarts.registerTheme('wonderland', response)
+	}
+})
 $(function() {
 	$('.refresh-data').click(function(){ //刷新
 		window.location.reload();
