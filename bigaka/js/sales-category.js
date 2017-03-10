@@ -54,8 +54,8 @@ $(function() {
 			top: 30,
 			width: '100%',
 			height: 660,
-			roam: false,'
-			breadcrumb: {'
+			roam: false,
+			breadcrumb: {
 				show: true,
 				left: 0,
 				top: 0
