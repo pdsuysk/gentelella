@@ -453,8 +453,8 @@ $(function() {
 					$('#oneCouponCollectNumberTotal').text(response.data.collectNumberTotal);
 					$('#oneCouponAppliedAmountTotal').text(response.data.appliedAmountTotal);
 
-					$('#oneCouponCollectPercent').text((response.data.collectNumberTotal / response.data.quantityTotal * 100).toFixed(2));
-					$('#oneCouponAppliedPercent').text((response.data.appliedAmountTotal / response.data.quantityTotal * 100).toFixed(2));
+					$('#oneCouponCollectPercent').text(response.data.quantityTotal > 0 ? (response.data.collectNumberTotal / response.data.quantityTotal * 100).toFixed(2) : 0);
+					$('#oneCouponAppliedPercent').text(response.data.quantityTotal > 0 ? (response.data.appliedAmountTotal / response.data.quantityTotal * 100).toFixed(2) : 0);
 
 					var oneCouponCollectPercentGrow = parseFloat($('#oneCouponCollectPercent').text()) - parseFloat($('#allCollectPercent').text());
 					var oneCouponAppliedPercentGrow = parseFloat($('#oneCouponAppliedPercent').text()) - parseFloat($('#allAppliedPercent').text());
