@@ -223,7 +223,7 @@ $(function() {
 						url: ajaxUrl,
 						type: 'post',
 						success: function(response) {
-							if(response.code === 0) {
+							if(response.code === 0 && response.data) {
 								// 显示矩形树图
 								var tempData = [];
 								if(productMode === '0') { // 导航
@@ -366,8 +366,8 @@ $(function() {
 			url: ctx + 'GuideOrderAction/getGuideListByGuideIdAction.do?parentGuideId=' + '829' + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
 			type: 'post',
 			success: function(response) {
-				if(response.code === 0) {
-					categoryTop10StatisticsChart.hideLoading();
+				categoryTop10StatisticsChart.hideLoading();
+				if(response.code === 0 && response.data) {
 					var seriesData = [
 						response.data.map(function(item) {
 							return item.productSaleNumber
@@ -423,8 +423,8 @@ $(function() {
 			url: url,
 			type: 'post',
 			success: function(response) {
-				if(response.code === 0) {
-					productTable.clear().draw();
+				productTable.clear().draw();
+				if(response.code === 0 && response.data) {
 					$.ajax({ // 获取门店所有商品总销量和总销售额
 						url: ctx + 'ProductOrderAction/getProductTotalByPStoreIdAction.do?parentStoreId=' + storeId + '&startDate=' + startDateFormat + '&endDate=' + endDateFormat,
 						type: 'post',
@@ -516,6 +516,8 @@ $(function() {
 							}
 						}
 					});
+				}else{
+					$('#productTable').hideLoading();
 				}
 			}
 		})
