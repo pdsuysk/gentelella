@@ -103,7 +103,7 @@ $(function() {
 				console.log(response.data)
 				$('.profile_info h2').text(response.data.storeUserInfo.userName);
 				$('.user-profile img').after(response.data.storeUserInfo.userName)
-				$('.profile_pic img, .user-profile img').attr('src', response.data.image_domain_url + response.data.storeUserInfo.photoUrl)
+				$('.profile_pic img, .user-profile img').attr('src', response.data.image_domain_url + response.data.infoStore.logoUrl)
 				$('.head-logout').click(function(){ // 切换用户
 					window.location.href = response.data.redirect_url;
 				})
