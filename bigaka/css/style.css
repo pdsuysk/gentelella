@@ -12,6 +12,12 @@ body .container.body .right_col {
 .btn {
 	padding: 4px 12px;
 }
+.back-orange {
+	background: #FF6600 !important;
+}
+.back-green {
+	background: #1abb9c !important;
+}
 .main_menu .fa {
 	float: left;
 	margin-top: 1px;

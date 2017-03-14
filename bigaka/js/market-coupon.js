@@ -556,10 +556,10 @@ $(function() {
 							'<tr class="' + (curCouponId == coupon.couponId ? 'success' : '') + '">' +
 							'<td class="coupon-name" data-id="' + coupon.couponId + '" data-name="' + coupon.title + '">' + coupon.title;
 						if(coupon.status === 1) {
-							trHtml += '<span class="status-tag pull-right">未开始</span>'
+							trHtml += '<span class="status-tag back-orange pull-right">未开始</span>'
 						}
 						if(coupon.status === 2) {
-							trHtml += '<span class="status-tag pull-right">已开始</span>'
+							trHtml += '<span class="status-tag back-green pull-right">已开始</span>'
 						}
 						if(coupon.status === 3) {
 							trHtml += '<span class="status-tag pull-right">已结束</span>'
