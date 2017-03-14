@@ -259,7 +259,7 @@ $(function() {
 
 							$('#ORAckAcountTotal').text((response_.data.ORAckAcountTotal/100).toFixed(2));
 							$('#ORunAcountTotal').text(((response_.data.ORAckAcountTotal - response_.data.ORAcountTotal)/100).toFixed(2));
-							$('#ORAcountTotal').text((response_.data.ORAcountTotal).toFixed(2));
+							$('#ORAcountTotal').text((response_.data.ORAcountTotal/100).toFixed(2));
 							$('#ORAcountPercent').text((response_.data.ORAckAcountTotal/response.data.orderPaidTotal*100).toFixed(2));
 						}
 					}
