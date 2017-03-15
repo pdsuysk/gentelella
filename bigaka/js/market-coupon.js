@@ -308,9 +308,9 @@ $(function() {
 				$('#activeKindNumber').text(response.data.kindNumber);
 				$('#activeQuantityTotal').text(response.data.quantityTotal);
 				$('#activeCollectNumber').text(response.data.collectNumberTotal);
-				$('#activeCollectPercent').text((response.data.collectNumberTotal / response.data.quantityTotal * 100).toFixed(2));
+				$('#activeCollectPercent').text(((response.data.collectNumberTotal === 0 || response.data.quantityTotal === 0) ? 0 : response.data.collectNumberTotal / response.data.quantityTotal * 100).toFixed(2));
 				$('#activeAppliedNumber').text(response.data.appliedAmountTotal);
-				$('#activeAppliedPercent').text((response.data.appliedAmountTotal / response.data.quantityTotal * 100).toFixed(2));
+				$('#activeAppliedPercent').text(((response.data.appliedAmountTotal === 0 || response.data.quantityTotal === 0) ? 0 : response.data.appliedAmountTotal / response.data.quantityTotal * 100).toFixed(2));
 				$('#activeOrderNumber').text(response.data.couponOrderNumberTotal);
 				$('#activeOrderMoney').text((response.data.couponOrderAmountTotal / 100).toFixed(2));
 				$('#activePrefeMoney').text((response.data.couponOrderPreferentialAmountTotal / 100).toFixed(2));
