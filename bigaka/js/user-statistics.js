@@ -553,7 +553,7 @@ $(function() {
 							}, ]
 						} ]
 					});
-					$('.custom-user-percent').show().find('h4').text((response.data.paidCustomerTotal/response.data.phoneCustomerTotal*100).toFixed(2) + '%');
+					$('.custom-user-percent').show().find('h4').text(((response.data.paidCustomerTotal === 0 || response.data.phoneCustomerTotal === 0) ? 0 : response.data.paidCustomerTotal/response.data.phoneCustomerTotal*100).toFixed(2) + '%');
 				}
 			}
 		})
