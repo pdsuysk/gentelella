@@ -1,13 +1,16 @@
 /*调整主题样式适应中文字体*/
 body {
   font-family: Hiragino Sans GB, Microsoft Yahei, SimSun, Helvetica, Arial, Sans-serif;
-  /*font-family: "Microsoft Yahei",Tahoma,"Lucida Grande",Verdana,STXihei,hei;*/ 
+  /*font-family: "Microsoft Yahei",Tahoma,"Lucida Grande",Verdana,STXihei,hei;*/
 }
 a {
 	cursor: pointer;
 }
 body .container.body .right_col {
 	margin-bottom: 49px !important;
+}
+.site_title {
+  font-size: 16px;
 }
 .btn {
 	padding: 4px 12px;
